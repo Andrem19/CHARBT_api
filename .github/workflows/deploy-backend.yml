@@ -1,40 +1,40 @@
-# name: Deploy to EC2
+name: Deploy to EC2
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Set up SSH
-#         uses: webfactory/ssh-agent@v0.5.3
-#         with:
-#           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-#       - name: Copy files to EC2
-#         run: |
-#           scp -r -o StrictHostKeyChecking=no * ubuntu@35.176.103.203:/home/ubuntu/app
+      - name: Copy files to EC2
+        run: |
+          scp -r -o StrictHostKeyChecking=no * ubuntu@35.176.103.203:/home/ubuntu/app
 
-#       - name: SSH and run Docker Compose
-#         run: |
-#           ssh -o StrictHostKeyChecking=no ubuntu@35.176.103.203 << 'EOF'
-#           cd /home/ubuntu/app
+      - name: SSH and run Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@35.176.103.203 << 'EOF'
+          cd /home/ubuntu/app
 
-#           export SECRET_KEY=${{ secrets.SECRET_KEY }}
-#           export AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }}
-#           export AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
-#           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-#           export STRIPE_KEY=${{ secrets.STRIPE_KEY }}
-#           export STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
-#           export STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }}
+          export SECRET_KEY=${{ secrets.SECRET_KEY }}
+          export AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }}
+          export AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+          export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+          export STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+          export STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
+          export STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }}
 
-#           sudo docker-compose -f docker-compose.prod.yml down
-#           sudo docker-compose -f docker-compose.prod.yml up --build -d
-#           EOF
+          sudo docker-compose -f docker-compose.prod.yml down
+          sudo docker-compose -f docker-compose.prod.yml up --build -d
+          EOF
