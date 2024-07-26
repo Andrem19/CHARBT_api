@@ -1,0 +1,24 @@
+# alembic==1.13.1
+flasgger==0.9.7.1
+Flask==3.0.3
+Flask_JWT_Extended==4.6.0
+Flask_Login==0.6.3
+Flask_Migrate==4.0.7
+flask_sqlalchemy==3.1.1
+numpy==1.24.4
+pandas==1.4.1
+python-decouple==3.8
+SQLAlchemy==2.0.27
+Werkzeug==3.0.3
+flask_cors
+flask_apscheduler
+psycopg2-binary
+boto3
+Flask-Caching
+redis
+gunicorn
+flask_mail
+jinja2
+emails
+stripe
+PyJWT

@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Blog posts upd!</h1>
+    {% for post in posts %}
+        <form method="POST" enctype="multipart/form-data">
+            <input readonly name="post_id" value="{{ post.id }}">
+            <textarea name="title" placeholder="Title" style="width: 100%; height: 50px;">{{ post.title }}</textarea><br>
+            <textarea name="content" placeholder="Content" style="width: 100%; height: 100px;">{{ post.content }}</textarea><br>
+            <img src="{{ post.img_url }}" alt="Post image"><br>
+            <input type="file" name="file"><br>
+            <label for="comments_on">Enable comments:</label>
+            <input type="checkbox" id="comments_on" name="comments_on" {% if post.comments_on %}checked{% endif %}><br>
+            
+            {% if post.poll %}
+            <label for="disabled">Disable poll:</label>
+            <input type="checkbox" id="disabled" name="disabled" {% if post.poll.disabled %}checked{% endif %}><br>
+            <label for="to_date">To date:</label>
+            <input type="datetime-local" id="to_date" name="to_date" value="{{ post.poll.to_date.isoformat() }}"><br>
+            {% endif %}
+
+            <input type="submit" value="Update Post">
+            <input type="submit" name="delete" value="Delete Post">
+        </form>
+        {% if post.poll %}
+            <form method="POST" action="{{ url_for('adm.add_vote') }}">
+                <input type="hidden" name="poll_id" value="{{ post.poll.id }}">
+                <select name="option_id">
+                    {% for option in post.poll.options %}
+                        <option value="{{ option.id }}">{{ option.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Add Vote">
+            </form>
+
+            <form method="POST" action="{{ url_for('adm.reward') }}">
+                <input type="hidden" name="poll_id" value="{{ post.poll.id }}">
+                <select name="correct_option_id">
+                    {% for option in post.poll.options %}
+                        <option value="{{ option.id }}">{{ option.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Reward Tokens">
+            </form>
+
+        {% endif %}
+    {% endfor %}
+{% endblock %}

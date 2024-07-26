@@ -1,0 +1,106 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Edit User</h1>
+    <form method="POST">
+        <table>
+            <tr>
+                <td><label for="username">Username:</label></td>
+                <td><input type="text" id="username" name="username" value="{{ user.username }}"></td>
+            </tr>
+            
+            <tr>
+                <td><label for="email">Email:</label></td>
+                <td><input type="text" id="email" name="email" value="{{ user.email }}"></td>
+            </tr>
+            <tr>
+                <td><label for="refcode">Refcode:</label></td>
+                <td><input type="text" id="refcode" name="refcode" value="{{ user.refcode }}"></td>
+            </tr>
+            <tr>
+                <td><label for="myrefer">My Refer:</label></td>
+                <td><input type="text" id="myrefer" name="myrefer" value="{{ user.myrefer }}"></td>
+            </tr>
+            <tr>
+                <td><label for="email_confirmed">Email Confirmed:</label></td>
+                <td><input type="checkbox" id="email_confirmed" name="email_confirmed" {% if user.email_confirmed %} checked {% endif %}></td>
+            </tr>
+            <tr>
+                <td><label for="password">Password:</label></td>
+                <td><input type="password" id="password" name="password"></td>
+            </tr>
+            <tr>
+                <td><label for="tokens">Tokens:</label></td>
+                <td><input type="number" id="tokens" name="tokens" value="{{ user.tokens }}"></td>
+            </tr>
+            <tr>
+                <td><label for="name_changed">Name Changed:</label></td>
+                <td><input type="number" id="name_changed" name="name_changed" value="{{ user.name_changed }}"></td>
+            </tr>
+            <tr>
+                <td><label for="avatarLink">Avatar Link:</label></td>
+                <td><input type="text" id="avatarLink" name="avatarLink" value="{{ user.avatarLink }}"></td>
+            </tr>
+            <tr>
+                <td><label for="token">Token:</label></td>
+                <td><input type="text" id="token" name="token" value="{{ user.token }}"></td>
+            </tr>
+            <tr>
+                <td><label for="settings_id">Settings ID:</label></td>
+                <td><input type="number" id="settings_id" name="settings_id" value="{{ user.settings_id }}"></td>
+            </tr>
+            <tr>
+                <td><label for="payment_status">Payment Status:</label></td>
+                <td><input type="text" id="payment_status" name="payment_status" value="{{ user.payment_status }}"></td>
+            </tr>
+            <tr>
+                <td><label for="subscription_to">Subscription To:</label></td>
+                <td><input type="number" id="subscription_to" name="subscription_to" value="{{ user.subscription_to }}"></td>
+            </tr>
+            <tr>
+                <td><label for="subscription_id">Subscription ID:</label></td>
+                <td><input type="text" id="subscription_id" name="subscription_id" value="{{ user.subscription_id }}"></td>
+            </tr>
+            <tr>
+                <td><label for="current_session_id">Current Session ID:</label></td>
+                <td><input type="number" id="current_session_id" name="current_session_id" value="{{ user.current_session_id }}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Save"></td>
+            </tr>
+        </table>
+    </form>
+
+    <form method="POST" action="{{ url_for('adm.send_email') }}">
+        <table>
+            <tr>
+                <td><label for="email">Email:</label></td>
+                <td><input type="text" id="email" name="email" value="{{ user.email }}" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="message">Message:</label></td>
+                <td><textarea id="message" name="message"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="service_email">Service Email:</label></td>
+                <td>
+                    <select id="service_email" name="service_email">
+                        <option value="service@charbt.com">service@charbt.com</option>
+                        <option value="payment@charbt.com">payment@charbt.com</option>
+                        <option value="support@charbt.com">support@charbt.com</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Send"></td>
+            </tr>
+        </table>
+    </form>
+
+    <form method="POST" action="{{ url_for('adm.delete_user') }}">
+        <input type="hidden" name="id" value="{{ user.id }}">
+        <input name="username">
+        <input type="submit" name="delete" value="Delete">
+    </form>
+{% endblock %}

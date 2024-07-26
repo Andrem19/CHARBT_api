@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    font-size: 18px;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    color: #4468e3;
+    font-size: 24px;
+}
+
+p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.confirm-link {
+    background-color: #2F4F4F;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 20px;
+}
+
+.signature {
+    font-style: italic;
+    color: #2F4F4F;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Email Address Confirmation</h2>
+    <p>Welcome to Charbt!</p>
+    <p>Thank you for registering. Please confirm your email address by clicking on the link below:</p>
+    <a href="{{ confirmation_link }}" class="confirm-link">Confirm Email Address</a>
+    <p>If you did not request this operation, simply ignore this email.</p>
+    <p class="signature">Best regards,<br>Your Team</p>
+</div>
+</body>
+</html>

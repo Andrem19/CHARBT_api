@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Blog page!</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <textarea name="title" placeholder="Title" style="width: 100%; height: 50px;"></textarea><br>
+        <textarea name="content" placeholder="Content" style="width: 100%; height: 100px;"></textarea><br>
+
+        <input type="file" name="file"><br>
+        <input type="text" name="question" placeholder="Question"><br>
+        <div id="options">
+            <input type="text" name="options" placeholder="Option 1"><br>
+            <input type="text" name="options" placeholder="Option 2"><br>
+        </div>
+        <button type="button" onclick="addOption()">Add Option</button><br>
+        <label for="comments_on">Enable comments:</label>
+        <input type="checkbox" id="comments_on" name="comments_on"><br>
+
+        <label for="disabled">Disable poll:</label>
+        <input type="checkbox" id="disabled" name="disabled"><br>
+        <label for="to_date">To date:</label>
+        <input type="datetime-local" id="to_date" name="to_date"><br>
+
+        <input type="submit" value="Create Post">
+    </form>
+    <script>
+        function addOption() {
+            var div = document.createElement('div');
+            div.innerHTML = '<input type="text" name="options" placeholder="Option"><br>';
+            document.getElementById('options').appendChild(div);
+        }
+    </script>
+{% endblock %}
+
+
+

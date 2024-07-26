@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Settings</h1>
+    <form method="POST" action="{{ url_for('adm.settings') }}">
+        <label for="ip">IP Address:</label><br>
+        <input type="text" id="ip" name="ip" required><br>
+        <input type="submit" name="action" value="Add">
+        <input type="submit" name="action" value="Remove">
+    </form>
+    <h2>Allowed IPs:</h2>
+    <ul>
+    {% for ip in allowed_ips %}
+        <li>{{ ip.ip }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

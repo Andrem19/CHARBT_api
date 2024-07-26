@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Welcome to the TextDb page!</h1>
+    {% for text_db in text_db_entries %}
+        <form method="POST" action="{{ url_for('adm.text_db') }}">
+            <input type="hidden" name="text_id" value="{{ text_db.id }}">
+            <label for="name_id">Name ID:</label>
+            <input type="text" id="name_id" name="name_id" value="{{ text_db.name_id }}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ text_db.name }}">
+            <label for="text">Text:</label>
+            <textarea id="text" name="text" style="white-space: pre-wrap;">{{ text_db.text }}</textarea>
+            <input type="submit" value="Update">
+        </form>
+    {% endfor %}
+{% endblock %}
+

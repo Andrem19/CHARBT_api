@@ -1,0 +1,37 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    volumes:
+      - server_data:/app/SERVER_SET
+    environment:
+      - ENV=production
+      - SECRET_KEY=${{ secrets.SECRET_KEY }}
+      - AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }}
+      - AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+      - EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+      - STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+      - STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
+      - STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }}
+    depends_on:
+      - redis
+  nginx:
+    build: ./nginx
+    ports:
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/serv.charbt.com/fullchain.pem:/etc/nginx/certs/fullchain.pem
+      - /etc/letsencrypt/live/serv.charbt.com/privkey.pem:/etc/nginx/certs/privkey.pem
+    depends_on:
+      - api
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+volumes:
+  server_data:
+
+
+
