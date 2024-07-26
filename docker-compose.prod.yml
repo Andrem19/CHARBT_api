@@ -8,13 +8,13 @@ services:
       - server_data:/app/SERVER_SET
     environment:
       - ENV=production
-      - SECRET_KEY=${{ secrets.SECRET_KEY }}
-      - AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }}
-      - AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
-      - EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-      - STRIPE_KEY=${{ secrets.STRIPE_KEY }}
-      - STRIPE_SECRET=${{ secrets.STRIPE_SECRET }}
-      - STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }}
+      - SECRET_KEY=$SECRET_KEY
+      - AWS_ACCES_KEY=$AWS_ACCES_KEY
+      - AWS_SECRET_KEY=$AWS_SECRET_KEY
+      - EMAIL_PASSWORD=$EMAIL_PASSWORD
+      - STRIPE_KEY=$STRIPE_KEY
+      - STRIPE_SECRET=$STRIPE_SECRET
+      - STRIPE_ENDPOINT_SECRET=$STRIPE_ENDPOINT_SECRET
     depends_on:
       - redis
   nginx:
