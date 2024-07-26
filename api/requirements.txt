@@ -17,7 +17,6 @@ boto3
 Flask-Caching
 redis
 gunicorn
-flask_mail
 jinja2
 emails
 stripe
