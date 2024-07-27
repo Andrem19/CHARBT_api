@@ -131,7 +131,7 @@ def cancel_subscription():
         subscription = stripe.Subscription.retrieve(g.user.subscription_id)
 
         # Check if the subscription is already cancelled
-        if subscription.status == 'canceled':
+        if subscription.status == 'canceled' or subscription['cancel_at_period_end']:
             end_date = datetime.fromtimestamp(subscription.current_period_end).strftime('%Y-%m-%d')
             return jsonify({'message': f'Subscription is already cancelled and will end on {end_date}'}), 200
 

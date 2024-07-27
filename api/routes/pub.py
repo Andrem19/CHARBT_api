@@ -323,12 +323,18 @@ def stripe_webhook_cancel():
         customer_id = subscription['customer']
 
         if subscription['cancel_at_period_end']:
+
+            product_id = subscription['items']['data'][0]['price']['product']
+            product = stripe.Product.retrieve(product_id)
+
+            # Get the plan name
+            plan = product['name']
             # Fetch the customer
             customer = stripe.Customer.retrieve(customer_id)
 
             user = User.query.filter_by(email=customer.email).first()
             if user:
-                emserv.send_email_sub_confirm(user.email, 'payment@charbt.com', 'Subscription Cancelled', user.username)
+                emserv.send_email_sub_confirm(user.email, 'payment@charbt.com', 'Subscription Cancelled', user.username, plan, subscription['id'])
             
             lg.add_logs(g.client_ip, user.id, 3000, f'Subscription canceled Sub_id: {user.subscription_id}')
 
