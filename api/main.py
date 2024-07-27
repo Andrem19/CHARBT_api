@@ -117,8 +117,8 @@ def create_app():
         g.client_ip = request.remote_addr
         allowedIp = AllowedIp.query.all()
         ip_list = [u.ip for u in allowedIp]
-        if g.client_ip not in ip_list:
-            return "Not Found", 404
+        # if g.client_ip not in ip_list:
+        #     return "Not Found", 404
         
         is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
         if is_banned:
