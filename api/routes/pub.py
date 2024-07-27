@@ -136,7 +136,11 @@ def register():
     user.token = token
     db.session.commit()
 
-    link = f'https://serv.charbt.com/pub/email_confirm?token={token}'
+    env = config('ENV')
+    link = 'serv.charbt.com' if env == 'production' else 'localhost:5000'
+    https = 'https' if env == 'production' else 'http'
+
+    link = f'{https}://{link}/pub/email_confirm?token={token}'
     emserv.send_email(user.email, 'service@charbt.com', 'Email Confirmation', link)
 
     return jsonify({'message': 'Registered successfully'}), 201
@@ -168,7 +172,10 @@ def confirm_email():
         user.change_email = ''
     db.session.commit()
 
-    return redirect("http://charbt.com/login?emailVerified=true")
+    env = config('ENV')
+    link = 'charbt.com' if env == 'production' else 'localhost:3000'
+    https = 'https' if env == 'production' else 'http'
+    return redirect(f"{https}://{link}/login?emailVerified=true")
 
 @pub.route('/get_text', methods=['GET'])
 def get_text():
