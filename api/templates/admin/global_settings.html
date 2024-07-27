@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>GlobalSettings</h1>
+    <form method="POST">
+        <label for="version">Version</label>
+        <input type="text" id="version" name="version" value="{{ global_settings.version }}">
+        <label for="blogLastPost">Blog Last Post</label>
+        <input type="text" id="blogLastPost" name="blogLastPost" value="{{ global_settings.blogLastPost }}">
+        <label for="blogOn">Blog On</label>
+        <input type="checkbox" id="blogOn" name="blogOn" {% if global_settings.blogOn %}checked{% endif %}>
+        <label for="startTheme">Start Theme</label>
+        <input type="text" id="startTheme" name="startTheme" value="{{ global_settings.startTheme }}">
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

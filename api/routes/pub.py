@@ -1,4 +1,4 @@
-from models import User, Session, PaymentPlans, TextDb, Settings, BlogPost, GlogalSettings
+from models import User, Session, PaymentPlans, TextDb, Settings, BlogPost, GlobalSettings
 import logging
 from decouple import config
 import time
@@ -20,7 +20,7 @@ import json
 @pub.route('/get_global_settings', methods=['GET'])
 @cache.memoize(timeout=120)  # кешируем результат на 1 час
 def get_global_settings():
-    settings = GlogalSettings.query.filter_by(version='v1').first()
+    settings = GlobalSettings.query.filter_by(version='v1').first()
     if settings is not None:
         return jsonify(settings.to_dict())
     else:

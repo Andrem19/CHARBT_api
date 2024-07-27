@@ -1,4 +1,4 @@
-from models import User, BlackList, PaymentPlans, TextDb, Logs, Admin, AllowedIp, BlogPost, Poll, PollOption, Vote, GlogalSettings
+from models import User, BlackList, PaymentPlans, TextDb, Logs, Admin, AllowedIp, BlogPost, Poll, PollOption, Vote, GlobalSettings
 from datetime import datetime, timedelta, timezone
 import time
 from flask import redirect, request, g, url_for, flash, jsonify
@@ -318,7 +318,7 @@ def blog():
                 db.session.add(new_option)
             db.session.commit()
 
-        settings = GlogalSettings.query.filter_by(version='v1').first()
+        settings = GlobalSettings.query.filter_by(version='v1').first()
         settings.blogLastPost = datetime.now(timezone.utc)
         db.session.commit()
 
@@ -369,6 +369,7 @@ def update_blog():
                 post.img_url = f"https://{bucket}.s3.amazonaws.com/{s3_path}"
             if post.poll:
                 post.poll.disabled = 'disabled' in request.form
+                post.poll.rewardPaid = 'rewardPaid' in request.form
                 post.poll.to_date = datetime.fromisoformat(request.form.get('to_date'))
             db.session.commit()
             return redirect(url_for('adm.update_blog'))
@@ -402,6 +403,8 @@ def reward():
         for vote in correct_option.votes:
             user = User.query.get(vote.user_id)
             user.tokens += 1
+        
+        poll.rewardPaid = True
 
         db.session.commit()
 
@@ -409,3 +412,20 @@ def reward():
     except Exception as e:
         print(jsonify({'Message': e}))
         return make_response(jsonify({'Message': e}), 500)
+
+
+from flask import render_template, request, redirect, url_for
+
+@adm.route('/global_settings', methods=['GET', 'POST'])
+def global_settings():
+    if request.method == 'POST':
+        global_settings = GlobalSettings.query.filter_by(version='v1').first()
+        global_settings.version = request.form.get('version')
+        global_settings.blogLastPost = request.form.get('blogLastPost')
+        global_settings.blogOn = request.form.get('blogOn') == 'on'
+        global_settings.startTheme = request.form.get('startTheme')
+        db.session.commit()
+        return redirect(url_for('adm.global_settings'))
+    else:
+        global_settings = GlobalSettings.query.filter_by(version='v1').first()
+        return render_template('admin/global_settings.html', global_settings=global_settings)

@@ -1,4 +1,4 @@
-from models import User, Settings, GlogalSettings
+from models import User, Settings, GlobalSettings
 import logging
 import time
 from datetime import timedelta
@@ -76,7 +76,7 @@ def verify():
 
         g_settings = cache.get('glogal_settings')
         if g_settings is None:
-            data_settings = GlogalSettings.query.filter_by(version='v1').first()
+            data_settings = GlobalSettings.query.filter_by(version='v1').first()
             g_settings = data_settings.to_dict()
             cache.set('glogal_settings', g_settings, timeout=120)
         user_data['global_settings'] = g_settings

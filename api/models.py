@@ -60,6 +60,7 @@ class Poll(db.Model):
     options = db.relationship('PollOption', cascade="all, delete-orphan")
     disabled = db.Column(db.Boolean, default=False)
     to_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc) + timedelta(days=1))
+    rewardPaid = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         return {
@@ -167,10 +168,11 @@ class Settings(db.Model):
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
-class GlogalSettings(db.Model):
+class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     version = db.Column(db.String(128), default='v1')
     blogLastPost = db.Column(db.DateTime, default=datetime.utcnow())
+    blogOn = db.Column(db.Boolean, default=False)
     startTheme = db.Column(db.String(40))
 
     def to_dict(self):
@@ -278,7 +280,7 @@ class TextDb(db.Model):
 
 def data_seed():
 
-    globalSettings = GlogalSettings(version='v1', blogLastPost=datetime.now(), startTheme='light')
+    globalSettings = GlobalSettings(version='v1', blogLastPost=datetime.now(), startTheme='light')
     db.session.add(globalSettings)
     db.session.commit()
     pp = '''1. Introduction
@@ -514,7 +516,7 @@ def data_seed():
     admin = Admin(username='curuvar', password_hash=generate_password_hash(password), role=RoleEnum.ADMIN.name)
     db.session.add(admin)
     db.session.commit()
-    emserv.send_servce_info_msg('7255591@gmail.com', 'service@charbt.com', f'psw: {password}')
+    # emserv.send_servce_info_msg('7255591@gmail.com', 'service@charbt.com', f'psw: {password}')
     alIp1 = AllowedIp(ip='86.4.138.8', user_id=admin.id)
     alIp2 = AllowedIp(ip='172.19.0.1', user_id=admin.id)
     alIp3 = AllowedIp(ip='192.168.128.1', user_id=admin.id)
