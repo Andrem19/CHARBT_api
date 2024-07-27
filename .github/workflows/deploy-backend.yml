@@ -32,7 +32,9 @@ jobs:
                EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
                STRIPE_KEY=${{ secrets.STRIPE_KEY }} \
                STRIPE_SECRET=${{ secrets.STRIPE_SECRET }} \
-               STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }} \
+               STRIPE_ENDPOINT_DELETED=${{ secrets.STRIPE_ENDPOINT_DELETED }} \
+               STRIPE_ENDPOINT_CANCELED=${{ secrets.STRIPE_ENDPOINT_CANCELED }} \
+               STRIPE_ENDPOINT_COMPLITE=${{ secrets.STRIPE_ENDPOINT_COMPLITE }} \
                docker-compose -f docker-compose.prod.yml down
           sudo SECRET_KEY=${{ secrets.SECRET_KEY }} \
                AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }} \
@@ -40,6 +42,8 @@ jobs:
                EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
                STRIPE_KEY=${{ secrets.STRIPE_KEY }} \
                STRIPE_SECRET=${{ secrets.STRIPE_SECRET }} \
-               STRIPE_ENDPOINT_SECRET=${{ secrets.STRIPE_ENDPOINT_SECRET }} \
+               STRIPE_ENDPOINT_DELETED=${{ secrets.STRIPE_ENDPOINT_DELETED }} \
+               STRIPE_ENDPOINT_CANCELED=${{ secrets.STRIPE_ENDPOINT_CANCELED }} \
+               STRIPE_ENDPOINT_COMPLITE=${{ secrets.STRIPE_ENDPOINT_COMPLITE }} \
                docker-compose -f docker-compose.prod.yml up --build -d
           EOF

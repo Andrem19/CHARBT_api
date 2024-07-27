@@ -269,7 +269,7 @@ def stripe_webhook_delete():
     sig_header = request.headers.get('Stripe-Signature')
     try:
         stripe.api_key = config('STRIPE_SECRET')
-        endpoint_secret = config('STRIPE_ENDPOINT_SECRET')
+        endpoint_secret = config('STRIPE_ENDPOINT_DELETED')
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
@@ -306,7 +306,7 @@ def stripe_webhook_cancel():
     sig_header = request.headers.get('Stripe-Signature')
     try:
         stripe.api_key = config('STRIPE_SECRET')
-        endpoint_secret = config('STRIPE_ENDPOINT_SECRET')
+        endpoint_secret = config('STRIPE_ENDPOINT_CANCELED')
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
@@ -318,18 +318,19 @@ def stripe_webhook_cancel():
         return 'Invalid signature', 400
 
     # Handle the event
-    if event['type'] == 'customer.subscription.canceled':
+    if event['type'] == 'customer.subscription.updated':
         subscription = event['data']['object']
         customer_id = subscription['customer']
 
-        # Fetch the customer
-        customer = stripe.Customer.retrieve(customer_id)
+        if subscription['cancel_at_period_end']:
+            # Fetch the customer
+            customer = stripe.Customer.retrieve(customer_id)
 
-        user = User.query.filter_by(email=customer.email).first()
-        if user:
-            emserv.send_email_sub_confirm(user.email, 'payment@charbt.com', 'Subscription Cancelled', user.username)
-        
-        lg.add_logs(g.client_ip, user.id, 3000, f'Subscription canceled Sub_id: {user.subscription_id}')
+            user = User.query.filter_by(email=customer.email).first()
+            if user:
+                emserv.send_email_sub_confirm(user.email, 'payment@charbt.com', 'Subscription Cancelled', user.username)
+            
+            lg.add_logs(g.client_ip, user.id, 3000, f'Subscription canceled Sub_id: {user.subscription_id}')
 
     return 'Success', 200
 
@@ -340,7 +341,7 @@ def stripe_webhook():
     sig_header = request.headers.get('Stripe-Signature')
     try:
         stripe.api_key = config('STRIPE_SECRET')
-        endpoint_secret = config('STRIPE_ENDPOINT_SECRET')
+        endpoint_secret = config('STRIPE_ENDPOINT_COMPLITE')
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
