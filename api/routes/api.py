@@ -148,6 +148,8 @@ def delete_session(session_id):
         return jsonify({'message': 'Cannot delete the only session'}), 400
 
     try:
+        Position.query.filter_by(session_id=session.id).delete()
+        
         db.session.delete(session)
         db.session.commit()
     except Exception as e:
