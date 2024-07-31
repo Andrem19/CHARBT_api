@@ -172,7 +172,7 @@ def add_position(session_id):
         data_settings = GlobalSettings.query.filter_by(version='v1').first()
         g_settings = data_settings.to_dict()
         cache.set('glogal_settings', g_settings, timeout=120)
-    if session.positions.count() >= g_settings.position_in_session:
+    if session.positions.count() >= g_settings['position_in_session']:
         return jsonify({'message': 'You have reached the limit on the number of positions in the session'}), 404
 
 
