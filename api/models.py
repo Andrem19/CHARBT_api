@@ -174,6 +174,7 @@ class GlobalSettings(db.Model):
     blogLastPost = db.Column(db.DateTime, default=datetime.utcnow())
     blogOn = db.Column(db.Boolean, default=False)
     startTheme = db.Column(db.String(40))
+    position_in_session = db.Column(db.Integer, default=2000)
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

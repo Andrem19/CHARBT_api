@@ -424,6 +424,7 @@ def global_settings():
         global_settings.blogLastPost = request.form.get('blogLastPost')
         global_settings.blogOn = request.form.get('blogOn') == 'on'
         global_settings.startTheme = request.form.get('startTheme')
+        global_settings.position_in_session = request.form.get('position_in_session')
         db.session.commit()
         return redirect(url_for('adm.global_settings'))
     else:

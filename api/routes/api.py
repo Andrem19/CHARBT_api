@@ -1,4 +1,4 @@
-from models import Position, Session
+from models import Position, Session, GlobalSettings
 import logging
 import helpers.get_data as gd
 import asyncio
@@ -166,6 +166,15 @@ def add_position(session_id):
 
     if not session or session.user_id != g.user.id:
         return jsonify({'message': 'Session not found or not owned by the current user'}), 404
+    
+    g_settings = cache.get('glogal_settings')
+    if g_settings is None:
+        data_settings = GlobalSettings.query.filter_by(version='v1').first()
+        g_settings = data_settings.to_dict()
+        cache.set('glogal_settings', g_settings, timeout=120)
+    if session.positions.count() >= g_settings.position_in_session:
+        return jsonify({'message': 'You have reached the limit on the number of positions in the session'}), 404
+
 
     body = request.get_json()
     data = body.get('position')
