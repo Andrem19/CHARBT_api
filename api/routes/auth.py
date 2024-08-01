@@ -66,7 +66,7 @@ def verify():
         if details in ['sessions', 'all']:
             sessions_data = []
             for session in g.user.sessions:
-                session_data = {'id': session.id, 'session_name': session.session_name, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': []}
+                session_data = {'id': session.id, 'pos_count': session.positions.count(), 'session_name': session.session_name, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': []}
                 sessions_data.append(session_data)
                 if session.id == g.user.current_session_id:
                     positions_data = [{'id': position.id, 'volatility': position.volatility, 'amount': position.amount, 'user_id': position.user_id, 'open_price': position.open_price, 'timeframe': position.timeframe, 'close_price': position.close_price, 'open_time': position.open_time, 'close_time': position.close_time, 'type_of_close': position.type_of_close, 'coin_pair': position.coin_pair, 'profit': position.profit, 'buy_sell': position.buy_sell} for position in session.positions]
