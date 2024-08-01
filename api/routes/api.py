@@ -205,7 +205,7 @@ def jwt_required_and_cache():
                 if data is None:
                     path = '/app/SERVER_SET/1577836800000_1717113600000.csv'
                     data = asyncio.run(gd.load_data_sets(path))
-                    data = data[:300]
+                    data = data[:200]
                     data = data[data[:, 0].argsort()]
                     cache.set('cached_init_data', data)
                     response = {'data': data.tolist()}
@@ -233,7 +233,7 @@ def get_data():
             name, need_find_point = serv.find_file_containing_timestamp(finish_date, files_map)
         
         if name is None:
-            return jsonify({'message': f'Something went wrong, maybe no more data n this pair and timeframe - {path} {len(data)}'}), 402
+            return jsonify({'message': f'Something went wrong, maybe no more data on this pair and timeframe. Try to reload the page to get new chunk of data'}), 402
         
         tm = serv.get_timeframe(timeframe)
         path = f'SERVER_SET/{coin}/{tm}/{name}'

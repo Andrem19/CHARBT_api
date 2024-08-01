@@ -415,9 +415,38 @@ def data_seed():
     db.session.add(privacy_policy)
     db.session.add(terms_of_service)
 
-    plan1 = PaymentPlans(name='Essential', token_price_day=10, price_id_month='price_1PXmi3JlOCgKlIIv9ERtH6CY', price_id_annualy='price_1PXnVOJlOCgKlIIvv5L0DMK0', price_subscription_month_1=29.99, price_subscription_year_1=359.88, price_subscription_month_2=23.99, price_subscription_year_2=287.88)
-    plan2 = PaymentPlans(name='Premium', token_price_day=15, price_id_month='price_1PXmiSJlOCgKlIIvwijm7ow2', price_id_annualy='price_1PXnVzJlOCgKlIIvYR3uEMMc', price_subscription_month_1=39.99, price_subscription_year_1=479.88, price_subscription_month_2=31.99, price_subscription_year_2=383.88)
-    plan3 = PaymentPlans(name='Premium-Plus', token_price_day=20, price_id_month='price_1PXmo9JlOCgKlIIv2V6PJECK', price_id_annualy='price_1PXnWjJlOCgKlIIvuISe2Xtr', price_subscription_month_1=49.99, price_subscription_year_1=599.88, price_subscription_month_2=39.99, price_subscription_year_2=479.88)
+    plan1 = PaymentPlans(
+        name='Essential', 
+        token_price_day=10, 
+        price_id_month='price_1Pj5PfJlOCgKlIIvk4LTp2Ug', 
+        price_id_annualy='price_1Pj5NvJlOCgKlIIvA5hHfAv6', 
+        price_subscription_month_1=35.99, 
+        price_subscription_year_1=431.88, 
+        price_subscription_month_2=28.99, 
+        price_subscription_year_2=347.88
+    )
+
+    plan2 = PaymentPlans(
+        name='Premium', 
+        token_price_day=15, 
+        price_id_month='price_1Pj5MvJlOCgKlIIv5taMeLOd', 
+        price_id_annualy='price_1Pj5LOJlOCgKlIIvH1uZTbdS', 
+        price_subscription_month_1=47.99, 
+        price_subscription_year_1=575.88, 
+        price_subscription_month_2=38.99, 
+        price_subscription_year_2=467.88
+    )
+
+    plan3 = PaymentPlans(
+        name='Premium-Plus', 
+        token_price_day=20, 
+        price_id_month='price_1Pj5IfJlOCgKlIIvUgfBnYmu', 
+        price_id_annualy='price_1Pj5FKJlOCgKlIIvg0DzlG4h', 
+        price_subscription_month_1=59.99, 
+        price_subscription_year_1=719.88, 
+        price_subscription_month_2=47.99, 
+        price_subscription_year_2=575.88
+    )
 
     db.session.add(plan1)
     db.session.add(plan2)
@@ -430,7 +459,7 @@ def data_seed():
     access122 = PlanAccess(paymentplans_id=plan1.id, name='Auxiliary Timeframe', number=1, all=100, description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
     access123 = PlanAccess(paymentplans_id=plan1.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=False)
     access124 = PlanAccess(paymentplans_id=plan1.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=False)
-    access125 = PlanAccess(paymentplans_id=plan1.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.', on=True)
+    access125 = PlanAccess(paymentplans_id=plan1.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
     access13 = PlanAccess(paymentplans_id=plan1.id, name='1 Day Timeframe', description='Access to 1 day timeframe', on=True)
     access14 = PlanAccess(paymentplans_id=plan1.id, name='1 Hour Timeframe', description='Access to 1 hour timeframe', on=True)
     access15 = PlanAccess(paymentplans_id=plan1.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=False)
@@ -458,7 +487,7 @@ def data_seed():
     access222 = PlanAccess(paymentplans_id=plan2.id, number=1, all=100, name='Auxiliary Timeframe', description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
     access223 = PlanAccess(paymentplans_id=plan2.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=True)
     access224 = PlanAccess(paymentplans_id=plan2.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=False)
-    access225 = PlanAccess(paymentplans_id=plan2.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.', on=True)
+    access225 = PlanAccess(paymentplans_id=plan2.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
     access23 = PlanAccess(paymentplans_id=plan2.id, name='1 Day Timeframe', description='Access to 1 day timeframe', on=True)
     access24 = PlanAccess(paymentplans_id=plan2.id, name='1 Hour Timeframe', description='Access to 1 hour timeframe', on=True)
     access25 = PlanAccess(paymentplans_id=plan2.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
@@ -486,7 +515,7 @@ def data_seed():
     access322 = PlanAccess(paymentplans_id=plan3.id, name='Auxiliary Timeframe', number=100, all=100, description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=True)
     access323 = PlanAccess(paymentplans_id=plan3.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=True)
     access324 = PlanAccess(paymentplans_id=plan3.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=True)
-    access325 = PlanAccess(paymentplans_id=plan3.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.', on=True)
+    access325 = PlanAccess(paymentplans_id=plan3.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
     access33 = PlanAccess(paymentplans_id=plan3.id, name='1 Day Timeframe', description='Access to 1 day timeframe', on=True)
     access34 = PlanAccess(paymentplans_id=plan3.id, name='1 Hour Timeframe', description='Access to 1 hour timeframe', on=True)
     access35 = PlanAccess(paymentplans_id=plan3.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
