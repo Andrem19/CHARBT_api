@@ -164,6 +164,7 @@ class Settings(db.Model):
     showMarkers = db.Column(db.Boolean, default=True)
     showTpsl = db.Column(db.Boolean, default=True)
     showPatterns = db.Column(db.Boolean, default=True)
+    showTools = db.Column(db.Boolean, default=True)
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
