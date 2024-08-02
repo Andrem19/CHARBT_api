@@ -411,7 +411,6 @@ def data_seed():
     **17. Service Interruptions
 
     We reserve the right to disable the website or certain features of the website for maintenance periods. During these times, the website or certain features may be unavailable.
-
     '''
 
     privacy_policy = TextDb(name='Privacy Policy', name_id='privacy_policy', text=pp, date=datetime.now().date())
