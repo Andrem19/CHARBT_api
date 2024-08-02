@@ -404,9 +404,14 @@ def data_seed():
 
     These Terms may be translated into multiple languages in the future. In the event of any inconsistency or discrepancy between the English version and a translated version, the English version shall prevail.
 
-    **16. Your Feedback**
+    **16. No Refunds**
+    
+    All payments made to Charbt are non-refundable. Once a payment is made, it cannot be refunded for any reason. However, you may cancel your subscription at any time to stop any future charges according to your plan.
 
-    We appreciate your feedback on our Terms. Please feel free to contact us at support@charbt.com with any questions or suggestions.
+    **17. Service Interruptions
+
+    We reserve the right to disable the website or certain features of the website for maintenance periods. During these times, the website or certain features may be unavailable.
+
     '''
 
     privacy_policy = TextDb(name='Privacy Policy', name_id='privacy_policy', text=pp, date=datetime.now().date())

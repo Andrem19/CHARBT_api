@@ -28,7 +28,7 @@ def get_session(session_id):
     if not session:
         return jsonify({'message': 'Session not found'}), 404
 
-    positions_data = [{'id': position.id, 'volatility': position.volatility, 'amount': position.amount, 'open_time': position.open_time, 'close_time': position.close_time, 'open_price': position.open_price, 'user_id': position.user_id, 'timeframe': position.timeframe, 'close_price': position.close_price, 'type_of_close': position.type_of_close, 'coin_pair': position.coin_pair, 'profit': position.profit, 'buy_sell': position.buy_sell} for position in session.positions]
+    positions_data = [{'id': position.id, 'session_id': position.session_id, 'volatility': position.volatility, 'amount': position.amount, 'open_time': position.open_time, 'close_time': position.close_time, 'open_price': position.open_price, 'user_id': position.user_id, 'timeframe': position.timeframe, 'close_price': position.close_price, 'type_of_close': position.type_of_close, 'coin_pair': position.coin_pair, 'profit': position.profit, 'buy_sell': position.buy_sell} for position in session.positions]
     session_data = {'id': session.id, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': positions_data}
 
     g.user.current_session_id = int(session_id)
