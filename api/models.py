@@ -33,6 +33,7 @@ class BlogPost(db.Model):
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(1000), nullable=True)
+    video_url = db.Column(db.String(1000), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     comments_on = db.Column(db.Boolean, default=False)
@@ -46,6 +47,7 @@ class BlogPost(db.Model):
             'title': self.title,
             'content': self.content,
             'img_url': self.img_url,
+            'video_url': self.video_url,
             'user_id': self.user_id,
             'timestamp': self.timestamp,
             'poll': self.poll.to_dict() if self.poll else None,

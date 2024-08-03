@@ -441,20 +441,40 @@ def upload_screenshot():
         file = request.files['file']
         if file.filename == '':
             return jsonify({'message': 'No file selected for uploading'}), 400
+
         bucket = 'charbtmarketdata'
         folder = 'SCREENSHOT_COLLECTION'
+        user_id = g.user.id
+        payment_status = g.user.payment_status
+
+        # Define upload limits based on user payment status
+        upload_limits = {
+            'default': 2,
+            'essential': 100,
+            'premium': 500,
+            'premium-plus': 1000
+        }
+
+        # Check the number of files already uploaded by the user
+        user_files = s3.list_objects_v2(Bucket=bucket, Prefix=f'{folder}/{user_id}/')
+        num_files = user_files.get('KeyCount', 0)
+
+        # Check if the user has reached their upload limit
+        if num_files >= upload_limits.get(payment_status, 2):
+            return jsonify({'message': 'Upload limit reached. Please upgrade your plan to upload more files.'}), 403
+
         if file:
             filename = secure_filename(file.filename)
-            s3_path = f'{folder}/{g.user.id}/{filename}'
+            s3_path = f'{folder}/{user_id}/{filename}'
 
-            # Проверка на существование файла
+            # Check if the file already exists
             try:
                 s3.head_object(Bucket=bucket, Key=s3_path)
-                # Если файл существует, добавляем случайную строку к имени файла
+                # If the file exists, add a random string to the filename
                 filename = f"{filename.rsplit('.', 1)[0]}_{''.join(random.choices(string.ascii_lowercase + string.digits, k=4))}.{filename.rsplit('.', 1)[1]}"
-                s3_path = f'{folder}/{g.user.id}/{filename}'
+                s3_path = f'{folder}/{user_id}/{filename}'
             except ClientError:
-                # Если файла не существует, продолжаем как обычно
+                # If the file does not exist, continue as usual
                 pass
 
             s3.upload_fileobj(file, bucket, s3_path)
@@ -464,6 +484,8 @@ def upload_screenshot():
         return jsonify({'message': 'Something went wrong'}), 500
     except Exception as e:
         logging.error(e, exc_info=True)
+        return jsonify({'message': 'Internal server error'}), 500
+
 
 @api.route('/get_screenshots', methods=['GET'])
 def get_screenshots():

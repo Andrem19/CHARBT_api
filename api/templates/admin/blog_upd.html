@@ -7,6 +7,7 @@
             <textarea name="title" placeholder="Title" style="width: 100%; height: 50px;">{{ post.title }}</textarea><br>
             <textarea name="content" placeholder="Content" style="width: 100%; height: 100px;">{{ post.content }}</textarea><br>
             <img src="{{ post.img_url }}" alt="Post image"><br>
+            <textarea name="video_url" placeholder="Video" style="width: 100%; height: 50px;">{{ post.video_url }}</textarea><br>
             <input type="file" name="file"><br>
             <label for="comments_on">Enable comments:</label>
             <input type="checkbox" id="comments_on" name="comments_on" {% if post.comments_on %}checked{% endif %}><br>
