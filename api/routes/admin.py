@@ -300,7 +300,8 @@ def blog():
             img_url = f"https://{bucket}.s3.amazonaws.com/{s3_path}"
         
         comments_on = 'comments_on' in request.form
-        new_post = BlogPost(title=title, content=content, user_id=1, img_url=img_url, video_url=video_url, comments_on=comments_on)
+        pinned = 'pinned' in request.form
+        new_post = BlogPost(title=title, content=content, user_id=1, img_url=img_url, video_url=video_url, comments_on=comments_on, pinned=pinned)
         db.session.add(new_post)
         db.session.commit()
 
@@ -359,6 +360,7 @@ def update_blog():
             post.content = request.form.get('content')
             post.video_url = request.form.get('video_url')
             post.comments_on = 'comments_on' in request.form
+            post.pinned = 'pinned' in request.form
             file = request.files['file']
             if file:
                 if post.img_url:

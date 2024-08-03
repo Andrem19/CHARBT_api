@@ -11,6 +11,8 @@
             <input type="file" name="file"><br>
             <label for="comments_on">Enable comments:</label>
             <input type="checkbox" id="comments_on" name="comments_on" {% if post.comments_on %}checked{% endif %}><br>
+            <label for="pinned">Pinned:</label>
+            <input type="checkbox" id="pinned" name="pinned" {% if post.pinned %}checked{% endif %}><br>
             
             {% if post.poll %}
             <label for="disabled">Disable poll:</label>

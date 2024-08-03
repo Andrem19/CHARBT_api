@@ -35,11 +35,12 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(1000), nullable=True)
     video_url = db.Column(db.String(1000), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     comments_on = db.Column(db.Boolean, default=False)
     user = db.relationship('User')
     poll = db.relationship('Poll', uselist=False, back_populates='blog_post')
     comments = db.relationship('Comment', lazy=True)
+    pinned = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         return {
@@ -48,6 +49,8 @@ class BlogPost(db.Model):
             'content': self.content,
             'img_url': self.img_url,
             'video_url': self.video_url,
+            'comments_on': self.comments_on,
+            'pinned': self.pinned,
             'user_id': self.user_id,
             'timestamp': self.timestamp,
             'poll': self.poll.to_dict() if self.poll else None,
