@@ -289,13 +289,15 @@ def blog():
         
 
         # Logic for uploading an image to S3 and saving its URL
+        img_url = ''
         file = request.files['file']
-        filename = secure_filename(file.filename)
-        bucket = 'charbtmarketdata'
-        folder = 'BLOG_IMG'
-        s3_path = f'{folder}/{filename}'
-        s3.upload_fileobj(file, bucket, s3_path)
-        img_url = f"https://{bucket}.s3.amazonaws.com/{s3_path}"
+        if file:
+            filename = secure_filename(file.filename)
+            bucket = 'charbtmarketdata'
+            folder = 'BLOG_IMG'
+            s3_path = f'{folder}/{filename}'
+            s3.upload_fileobj(file, bucket, s3_path)
+            img_url = f"https://{bucket}.s3.amazonaws.com/{s3_path}"
         
         comments_on = 'comments_on' in request.form
         new_post = BlogPost(title=title, content=content, user_id=1, img_url=img_url, video_url=video_url, comments_on=comments_on)
