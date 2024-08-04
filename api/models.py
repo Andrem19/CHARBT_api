@@ -287,7 +287,7 @@ class TextDb(db.Model):
 
 def data_seed():
 
-    globalSettings = GlobalSettings(version='v1', blogLastPost=datetime.now(), startTheme='light')
+    globalSettings = GlobalSettings(version='v1', blogLastPost=datetime.now(), startTheme='light', blogOn=True)
     db.session.add(globalSettings)
     db.session.commit()
     pp = '''1. Introduction

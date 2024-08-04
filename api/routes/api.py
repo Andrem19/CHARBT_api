@@ -147,15 +147,21 @@ def delete_session(session_id):
     if g.user.sessions.count() <= 1:
         return jsonify({'message': 'Cannot delete the only session'}), 400
 
+    if g.user.current_session_id == session.id:
+        previous_session = Session.query.filter(Session.user_id == g.user.id, Session.id < session.id).order_by(Session.id.desc()).first()
+        if not previous_session:
+            previous_session = Session.query.filter(Session.user_id == g.user.id).order_by(Session.id.desc()).first()
+        g.user.current_session_id = previous_session.id
+
     try:
         Position.query.filter_by(session_id=session.id).delete()
-        
         db.session.delete(session)
         db.session.commit()
     except Exception as e:
         return jsonify({'message': 'An error occurred while deleting the session', 'error': str(e)}), 500
 
     return jsonify({'message': 'Session deleted successfully'}), 200
+
 
 
 
