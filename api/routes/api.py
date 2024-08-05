@@ -117,6 +117,9 @@ def add_session():
         try:
             db.session.add(session)
             db.session.commit()
+
+            g.user.current_session_id = session.id
+            db.session.commit()
         except Exception as e:
             return jsonify({'message': 'An error occurred while adding the session', 'error': str(e)}), 500
 
