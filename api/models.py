@@ -449,8 +449,8 @@ def data_seed():
     plan3 = PaymentPlans(
         name='Premium-Plus', 
         token_price_day=20, 
-        price_id_month='price_1Pj5IfJlOCgKlIIvUgfBnYmu', 
-        price_id_annualy='price_1Pj5FKJlOCgKlIIvg0DzlG4h', 
+        price_id_month='price_1PkqnIJlOCgKlIIvh9DRH9BS', 
+        price_id_annualy='price_1PkqoKJlOCgKlIIvBhzpBzYq', 
         price_subscription_month_1=59.99, 
         price_subscription_year_1=719.88, 
         price_subscription_month_2=47.99, 
@@ -465,7 +465,7 @@ def data_seed():
     access11 = PlanAccess(paymentplans_id=plan1.id, name='5 Trading Pairs', number=5, all=21, description='Access to 5 trading pairs: BTCUSDT, ETHUSDT, BNBUSDT, AAPL, EURUSD', on=True)
     access12 = PlanAccess(paymentplans_id=plan1.id, name='Save 100 Charts', number=100, all=1000, description='Ability to save up to 100 charts', on=True)
     access121 = PlanAccess(paymentplans_id=plan1.id, name='10 Sessions', number=10, all=100, description='You can have up to 10 sessions at the same time, to create new ones you will need to delete old ones', on=True)
-    access122 = PlanAccess(paymentplans_id=plan1.id, name='Auxiliary Timeframe', number=1, all=100, description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
+    access122 = PlanAccess(paymentplans_id=plan1.id, name='Auxiliary Timeframe', number=1, all=100, description='You can have 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
     access123 = PlanAccess(paymentplans_id=plan1.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=False)
     access124 = PlanAccess(paymentplans_id=plan1.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=False)
     access125 = PlanAccess(paymentplans_id=plan1.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
@@ -493,7 +493,7 @@ def data_seed():
     access21 = PlanAccess(paymentplans_id=plan2.id, name='All Trading Pairs', number=21, all=21, description='Access to all trading pairs on the platform', on=True)
     access22 = PlanAccess(paymentplans_id=plan2.id, name='Save 500 Charts', number=500, all=1000, description='Ability to save up to 500 charts', on=True)
     access221 = PlanAccess(paymentplans_id=plan2.id, name='50 Sessions', number=50, all=100, description='You can have up to 50 sessions at the same time, to create new ones you will need to delete old ones', on=True)
-    access222 = PlanAccess(paymentplans_id=plan2.id, number=1, all=100, name='Auxiliary Timeframe', description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
+    access222 = PlanAccess(paymentplans_id=plan2.id, number=1, all=100, name='Auxiliary Timeframe', description='You can have 1 auxiliary timeframe, which will follow the main one as you trade.', on=False)
     access223 = PlanAccess(paymentplans_id=plan2.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=True)
     access224 = PlanAccess(paymentplans_id=plan2.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=False)
     access225 = PlanAccess(paymentplans_id=plan2.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
@@ -521,7 +521,7 @@ def data_seed():
     access31 = PlanAccess(paymentplans_id=plan3.id, name='All Trading Pairs', number=21, all=21, description='Access to all trading pairs on the platform', on=True)
     access32 = PlanAccess(paymentplans_id=plan3.id, name='Save 1000 Charts', number=1000, all=1000, description='Ability to save up to 1000 charts', on=True)
     access321 = PlanAccess(paymentplans_id=plan3.id, name='100 Sessions', number=100, all=100, description='You can have up to 100 sessions at the same time, to create new ones you will need to delete old ones', on=True)
-    access322 = PlanAccess(paymentplans_id=plan3.id, name='Auxiliary Timeframe', number=100, all=100, description='You can select 1 auxiliary timeframe, which will follow the main one as you trade.', on=True)
+    access322 = PlanAccess(paymentplans_id=plan3.id, name='Auxiliary Timeframe', number=100, all=100, description='You can have 1 auxiliary timeframe, which will follow the main one as you trade.', on=True)
     access323 = PlanAccess(paymentplans_id=plan3.id, name='Detailed statistics', number=1, all=100, description='Detailed statistics with visualizations, graphs and detailed data.', on=True)
     access324 = PlanAccess(paymentplans_id=plan3.id, name='Saving session data in csv', number=1, all=100, description='You can save session data for each position with candles and situation as well as position type and result in csv format to use this data for research purposes or training machine learning models.', on=True)
     access325 = PlanAccess(paymentplans_id=plan3.id, name='Voting in polls', description='You can vote in polls regarding the introduction of new features for the service on our blog.(blog under development)', on=True)
