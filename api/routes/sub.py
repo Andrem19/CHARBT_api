@@ -103,38 +103,33 @@ def checkout():
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
-        customer = stripe.Customer.create(
-            email=g.user.email,
-        )
-
         payment_method = stripe.PaymentMethod.create(
             type='card',
             card={
                 'token': payment_data['token']
             }
         )
-        stripe.PaymentMethod.attach(
-            payment_method.id,
-            customer=customer.id,
-        )
-        payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
-            currency='usd',
-            customer=customer.id,
+
+        customer = stripe.Customer.create(
             payment_method=payment_method.id,
-            setup_future_usage='off_session'
+            email=g.user.email,
+            invoice_settings={'default_payment_method': payment_method.id}
         )
-        print('payment_intent', payment_intent)
-        if not payment_intent:
-            return jsonify({'message': 'PaymentIntent creation failed'}), 202
         
         subscription = stripe.Subscription.create(
             customer=customer.id,
             items=[{'price': plan}],
             default_payment_method=payment_method.id
         )
+        subscription = stripe.Subscription.create(
+            customer=customer.id,
+            items=[{
+                'price': plan,
+            }],
+            expand=['latest_invoice.payment_intent']
+        )
 
-        return jsonify({'message': 'PaymentIntent created', 'client_secret': subscription.latest_invoice.payment_intent.client_secret}), 200
+        return jsonify({'message': 'PaymentIntent created', 'client_secret': subscription.latest_invoice.payment_intent.client_secret }), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
 
