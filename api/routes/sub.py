@@ -92,14 +92,11 @@ def checkout():
             return jsonify({'message': 'Plan is undefined'}), 202
         
         plan = ''
-        amount = 0
 
         if payment_data['type'] == 'monthly':
             plan = planInstance.price_id_month
-            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
         elif payment_data['type'] == 'annualy':
             plan = planInstance.price_id_annualy
-            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
