@@ -143,7 +143,6 @@ def create_subscription():
         customer_id = subscription_data['customer_id']
         plan = subscription_data['plan']
 
-        # Получаем PaymentIntent для проверки
         payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
 
         if payment_intent.status != 'succeeded':
