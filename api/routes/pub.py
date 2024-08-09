@@ -281,6 +281,7 @@ def stripe_webhook_delete():
         return 'Invalid signature', 400
 
     # Handle the event
+    print(event['t'], event['type'])
     if event['type'] == 'customer.subscription.deleted':
         subscription = event['data']['object']
         customer_id = subscription['customer']
@@ -289,6 +290,7 @@ def stripe_webhook_delete():
         customer = stripe.Customer.retrieve(customer_id)
 
         user = User.query.filter_by(email=customer.email).first()
+        print('user.id', user.id)
         if user:
             # Update user status in the database
             user.payment_status = 'default'
