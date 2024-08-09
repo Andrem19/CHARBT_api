@@ -440,7 +440,7 @@ def data_seed():
         token_price_day=15, 
         price_id_month='price_1PluUaJlOCgKlIIvuJqrxlRU', 
         price_id_annualy='price_1PloYaJlOCgKlIIvimo1yNnb', 
-        price_subscription_month_1=47.99, 
+        price_subscription_month_1=1,#47.99, 
         price_subscription_year_1=575.88, 
         price_subscription_month_2=38.99, 
         price_subscription_year_2=467.88
