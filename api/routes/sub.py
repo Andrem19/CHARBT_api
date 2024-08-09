@@ -96,10 +96,10 @@ def checkout():
 
         if payment_data['type'] == 'monthly':
             plan = planInstance.price_id_month
-            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
+            amount = int(planInstance.price_subscription_month_1 * 100)
         elif payment_data['type'] == 'annualy':
             plan = planInstance.price_id_annualy
-            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
+            amount = int(planInstance.price_subscription_year_1 * 100)
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
@@ -109,7 +109,7 @@ def checkout():
         )
 
         payment_intent = stripe.PaymentIntent.create(
-            amount=amount,  # Указываем сумму платежа из плана подписки
+            amount=amount,
             currency='usd',
             customer=customer.id,
             payment_method_types=['card'],
@@ -118,6 +118,11 @@ def checkout():
         print('payment_intent', payment_intent)
         if not payment_intent:
             return jsonify({'message': 'PaymentIntent creation failed'}), 202
+        
+        confirmed_payment_intent = stripe.PaymentIntent.confirm(
+            payment_intent.id,
+            payment_method=payment_data['token']
+        )
 
         subscription = stripe.Subscription.create(
             customer=customer.id,
@@ -129,7 +134,7 @@ def checkout():
 
         lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
 
-        return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
+        return jsonify({'message': 'Subscription created successful', 'client_secret': confirmed_payment_intent.client_secret}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
 
