@@ -118,11 +118,6 @@ def checkout():
         
         subscription = stripe.Subscription.create(
             customer=customer.id,
-            items=[{'price': plan}],
-            default_payment_method=payment_method.id
-        )
-        subscription = stripe.Subscription.create(
-            customer=customer.id,
             items=[{
                 'price': plan,
             }],

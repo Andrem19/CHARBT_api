@@ -345,7 +345,9 @@ def stripe_webhook_cancel():
 def stripe_webhook():
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get('Stripe-Signature')
+    print('sig_header', sig_header)
     try:
+        print(config('STRIPE_SECRET'), config('STRIPE_ENDPOINT_COMPLITE'))
         stripe.api_key = config('STRIPE_SECRET')
         endpoint_secret = config('STRIPE_ENDPOINT_COMPLITE')
         event = stripe.Webhook.construct_event(
@@ -353,10 +355,10 @@ def stripe_webhook():
         )
     except ValueError as e:
         # Invalid payload
-        print(e)
+        print('Error 1:', e)
         return 'Invalid payload', 400
     except stripe.error.SignatureVerificationError as e:
-        print(e)
+        print('Error 2:', e)
         # Invalid signature
         return 'Invalid signature', 400
     # Handle the event
