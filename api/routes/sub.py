@@ -96,10 +96,10 @@ def checkout():
 
         if payment_data['type'] == 'monthly':
             plan = planInstance.price_id_month
-            amount = int(planInstance.price_subscription_month_1 * 100)
+            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
         elif payment_data['type'] == 'annualy':
             plan = planInstance.price_id_annualy
-            amount = int(planInstance.price_subscription_year_1 * 100)
+            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
@@ -109,12 +109,15 @@ def checkout():
         )
 
         payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
+            amount=amount,  # Указываем сумму платежа из плана подписки
             currency='usd',
             customer=customer.id,
             payment_method_types=['card'],
             setup_future_usage='off_session'
         )
+        print('payment_intent', payment_intent)
+        if not payment_intent:
+            return jsonify({'message': 'PaymentIntent creation failed'}), 202
 
         subscription = stripe.Subscription.create(
             customer=customer.id,
@@ -127,10 +130,10 @@ def checkout():
         lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
 
         return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
-
     except Exception as e:
-        logging.info(e)
-        return jsonify(error=str(e)), 201
+        return jsonify({'message': str(e)}), 400
+
+
     
 @api.route('/cancel_subscription', methods=['POST'])
 def cancel_subscription():
