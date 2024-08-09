@@ -125,7 +125,17 @@ def create_subscription():
         subscription_data = request.get_json()
 
         customer_id = subscription_data['customer_id']
-        plan = subscription_data['plan']
+
+        planInstance = PaymentPlans.query.filter_by(name=subscription_data['plan']).first()
+
+        if subscription_data['type'] == 'monthly':
+            plan = planInstance.price_id_month
+            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
+        elif subscription_data['type'] == 'annualy':
+            plan = planInstance.price_id_annualy
+            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
+        else:
+            return jsonify({'message': 'Plan is undefined'}), 202
 
         subscription = stripe.Subscription.create(
             customer=customer_id,
