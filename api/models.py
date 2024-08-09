@@ -427,8 +427,8 @@ def data_seed():
     plan1 = PaymentPlans(
         name='Essential', 
         token_price_day=10, 
-        price_id_month='price_1Pj5PfJlOCgKlIIvk4LTp2Ug', 
-        price_id_annualy='price_1Pj5NvJlOCgKlIIvA5hHfAv6', 
+        price_id_month='price_1PlofdJlOCgKlIIvXJAso02E', 
+        price_id_annualy='price_1PlofAJlOCgKlIIvCZ0yWJHu', 
         price_subscription_month_1=35.99, 
         price_subscription_year_1=431.88, 
         price_subscription_month_2=28.99, 
@@ -438,8 +438,8 @@ def data_seed():
     plan2 = PaymentPlans(
         name='Premium', 
         token_price_day=15, 
-        price_id_month='price_1Pj5MvJlOCgKlIIv5taMeLOd', 
-        price_id_annualy='price_1Pj5LOJlOCgKlIIvH1uZTbdS', 
+        price_id_month='price_1PloYuJlOCgKlIIv5jtiH36A', 
+        price_id_annualy='price_1PloYaJlOCgKlIIvimo1yNnb', 
         price_subscription_month_1=47.99, 
         price_subscription_year_1=575.88, 
         price_subscription_month_2=38.99, 
@@ -449,8 +449,8 @@ def data_seed():
     plan3 = PaymentPlans(
         name='Premium-Plus', 
         token_price_day=20, 
-        price_id_month='price_1PkqnIJlOCgKlIIvh9DRH9BS', 
-        price_id_annualy='price_1PkqoKJlOCgKlIIvBhzpBzYq', 
+        price_id_month='price_1PloXjJlOCgKlIIvGj99pzLg', 
+        price_id_annualy='price_1PloXGJlOCgKlIIvxkCq00BY', 
         price_subscription_month_1=59.99, 
         price_subscription_year_1=719.88, 
         price_subscription_month_2=47.99, 
