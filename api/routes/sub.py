@@ -96,33 +96,32 @@ def checkout():
 
         if payment_data['type'] == 'monthly':
             plan = planInstance.price_id_month
-            amount = int(planInstance.price_subscription_month_1 * 100)
+            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
         elif payment_data['type'] == 'annualy':
             plan = planInstance.price_id_annualy
-            amount = int(planInstance.price_subscription_year_1 * 100)
+            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
         customer = stripe.Customer.create(
             email=g.user.email,
-            source=payment_data['token'],
         )
 
         payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
+            amount=amount,  # Указываем сумму платежа из плана подписки
             currency='usd',
             customer=customer.id,
-            payment_method_types=['card'],
+            payment_method_data={
+                'type': 'card',
+                'card': {
+                    'token': payment_data['token']
+                }
+            },
             setup_future_usage='off_session'
         )
-        print('payment_intent', payment_intent)
+
         if not payment_intent:
             return jsonify({'message': 'PaymentIntent creation failed'}), 202
-        
-        confirmed_payment_intent = stripe.PaymentIntent.confirm(
-            payment_intent.id,
-            payment_method=payment_data['token']
-        )
 
         subscription = stripe.Subscription.create(
             customer=customer.id,
@@ -134,9 +133,10 @@ def checkout():
 
         lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
 
-        return jsonify({'message': 'Subscription created successful', 'client_secret': confirmed_payment_intent.client_secret}), 200
+        return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
+
 
 
     
