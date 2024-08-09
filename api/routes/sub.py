@@ -107,26 +107,34 @@ def checkout():
             email=g.user.email,
         )
 
+        payment_method = stripe.PaymentMethod.create(
+            type='card',
+            card={
+                'token': payment_data['token']
+            }
+        )
+
+        # Прикрепляем метод оплаты к клиенту
+        stripe.PaymentMethod.attach(
+            payment_method.id,
+            customer=customer.id,
+        )
+
         payment_intent = stripe.PaymentIntent.create(
             amount=amount,  # Указываем сумму платежа из плана подписки
             currency='usd',
             customer=customer.id,
-            payment_method_data={
-                'type': 'card',
-                'card': {
-                    'token': payment_data['token']
-                }
-            },
+            payment_method=payment_method.id,
             setup_future_usage='off_session'
         )
-
+        print('payment_intent', payment_intent)
         if not payment_intent:
             return jsonify({'message': 'PaymentIntent creation failed'}), 202
 
         subscription = stripe.Subscription.create(
             customer=customer.id,
             items=[{'price': plan}],
-            default_payment_method=payment_intent.payment_method
+            default_payment_method=payment_method.id
         )
         if not subscription:
             return jsonify({'message': 'Subscription creation failed'}), 202
@@ -136,6 +144,7 @@ def checkout():
         return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
+
 
 
 
