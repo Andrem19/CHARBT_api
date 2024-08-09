@@ -126,7 +126,7 @@ def checkout():
 
         lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
 
-        return jsonify({'message': 'Subscription created successful'}), 200
+        return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
 
     except Exception as e:
         logging.info(e)
