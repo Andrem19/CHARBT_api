@@ -92,11 +92,14 @@ def checkout():
             return jsonify({'message': 'Plan is undefined'}), 202
         
         plan = ''
+        amount = 0
 
         if payment_data['type'] == 'monthly':
             plan = planInstance.price_id_month
+            amount = int(planInstance.price_subscription_month_1 * 100)
         elif payment_data['type'] == 'annualy':
             plan = planInstance.price_id_annualy
+            amount = int(planInstance.price_subscription_year_1 * 100)
         else:
             return jsonify({'message': 'Plan is undefined'}), 202
 
@@ -105,9 +108,18 @@ def checkout():
             source=payment_data['token'],
         )
 
+        payment_intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='usd',
+            customer=customer.id,
+            payment_method_types=['card'],
+            setup_future_usage='off_session'
+        )
+
         subscription = stripe.Subscription.create(
             customer=customer.id,
             items=[{'price': plan}],
+            default_payment_method=payment_intent.payment_method
         )
         if not subscription:
             return jsonify({'message': 'Subscription creation failed'}), 202
