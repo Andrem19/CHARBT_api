@@ -353,23 +353,26 @@ def stripe_webhook():
         )
     except ValueError as e:
         # Invalid payload
+        print(e)
         return 'Invalid payload', 400
     except stripe.error.SignatureVerificationError as e:
+        print(e)
         # Invalid signature
         return 'Invalid signature', 400
     # Handle the event
+    print('event['']', event['type'])
     if event['type'] == 'customer.subscription.created':
         subscription = event['data']['object']
         customer_id = subscription['customer']
 
         # Fetch the customer
         customer = stripe.Customer.retrieve(customer_id)
-
+        print('customer',customer)
         # Fetch the price and product
         price_id = subscription['items']['data'][0]['price']['id']
         price = stripe.Price.retrieve(price_id)
         product = stripe.Product.retrieve(price['product'])
-
+        print(price_id, price, product)
         user = User.query.filter_by(email=customer.email).first()
         if user:
             # Update user status in the database

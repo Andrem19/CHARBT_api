@@ -427,9 +427,9 @@ def data_seed():
     plan1 = PaymentPlans(
         name='Essential', 
         token_price_day=10, 
-        price_id_month='price_1PlofdJlOCgKlIIvXJAso02E', 
-        price_id_annualy='price_1PlofAJlOCgKlIIvCZ0yWJHu', 
-        price_subscription_month_1=2,#35.99, 
+        price_id_month='price_1Pj5PfJlOCgKlIIvk4LTp2Ug', 
+        price_id_annualy='price_1Pj5NvJlOCgKlIIvA5hHfAv6', 
+        price_subscription_month_1=35.99, 
         price_subscription_year_1=431.88, 
         price_subscription_month_2=28.99, 
         price_subscription_year_2=347.88
@@ -438,8 +438,8 @@ def data_seed():
     plan2 = PaymentPlans(
         name='Premium', 
         token_price_day=15, 
-        price_id_month='price_1PloYuJlOCgKlIIv5jtiH36A', 
-        price_id_annualy='price_1PloYaJlOCgKlIIvimo1yNnb', 
+        price_id_month='price_1Pj5MvJlOCgKlIIv5taMeLOd', 
+        price_id_annualy='price_1Pj5LOJlOCgKlIIvH1uZTbdS', 
         price_subscription_month_1=47.99, 
         price_subscription_year_1=575.88, 
         price_subscription_month_2=38.99, 
@@ -449,8 +449,8 @@ def data_seed():
     plan3 = PaymentPlans(
         name='Premium-Plus', 
         token_price_day=20, 
-        price_id_month='price_1PloXjJlOCgKlIIvGj99pzLg', 
-        price_id_annualy='price_1PloXGJlOCgKlIIvxkCq00BY', 
+        price_id_month='price_1PkqnIJlOCgKlIIvh9DRH9BS', 
+        price_id_annualy='price_1PkqoKJlOCgKlIIvBhzpBzYq', 
         price_subscription_month_1=59.99, 
         price_subscription_year_1=719.88, 
         price_subscription_month_2=47.99, 
@@ -573,6 +573,7 @@ def data_seed():
         User(email="user3@example.com", email_confirmed=True, ip_list=ip_list, username="user3", password_hash=generate_password_hash("userpassword3"), payment_status='premium-plus', settings=Settings(), badge='green'),
         User(email="moderator@example.com", email_confirmed=True, ip_list=ip_list, username="moderator", password_hash=generate_password_hash("moderatorpassword"), payment_status='premium', settings=Settings()),
         User(email="admin@example.com", email_confirmed=True, ip_list=ip_list, username="admin", password_hash=generate_password_hash("adminpassword"), payment_status='essential', settings=Settings()),
+        User(email="7255591@gmail.com", email_confirmed=True, ip_list=ip_list, username="Andrem", password_hash=generate_password_hash("Oad106zfyvjo"), payment_status='default', settings=Settings()),
     ]
 
     # Add users to the session

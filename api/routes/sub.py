@@ -113,15 +113,12 @@ def checkout():
                 'token': payment_data['token']
             }
         )
-
-        # Прикрепляем метод оплаты к клиенту
         stripe.PaymentMethod.attach(
             payment_method.id,
             customer=customer.id,
         )
-
         payment_intent = stripe.PaymentIntent.create(
-            amount=amount,  # Указываем сумму платежа из плана подписки
+            amount=amount,
             currency='usd',
             customer=customer.id,
             payment_method=payment_method.id,
@@ -142,6 +139,42 @@ def checkout():
         lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
 
         return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 400
+
+@api.route('/create-subscription', methods=['POST'])
+def create_subscription():
+    try:
+        stripe.api_key = config('STRIPE_SECRET')
+
+        subscription_data = request.get_json()
+
+        payment_intent_id = subscription_data['payment_intent_id']
+
+        # Получаем PaymentIntent для проверки
+        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+        
+        print('payment_intent', payment_intent)
+
+        if payment_intent.status != 'succeeded':
+            return jsonify({'message': 'Payment not completed'}), 400
+
+        customer_id = payment_intent.customer
+        payment_method_id = payment_intent.payment_method
+
+        # Получаем план из PaymentIntent
+        plan = payment_intent.metadata['plan']
+
+        subscription = stripe.Subscription.create(
+            customer=customer_id,
+            items=[{'price': plan}],
+            default_payment_method=payment_method_id
+        )
+
+        if not subscription:
+            return jsonify({'message': 'Subscription creation failed'}), 202
+
+        return jsonify({'message': 'Subscription created successfully', 'subscription_id': subscription.id}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
 
