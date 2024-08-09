@@ -128,16 +128,6 @@ def checkout():
         if not payment_intent:
             return jsonify({'message': 'PaymentIntent creation failed'}), 202
 
-        subscription = stripe.Subscription.create(
-            customer=customer.id,
-            items=[{'price': plan}],
-            default_payment_method=payment_method.id
-        )
-        if not subscription:
-            return jsonify({'message': 'Subscription creation failed'}), 202
-
-        lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {payment_data["plan"]} Sub_id: {subscription.id}')
-
         return jsonify({'message': 'Subscription created successful', 'client_secret': payment_intent.client_secret}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
@@ -153,7 +143,7 @@ def create_subscription():
 
         # Получаем PaymentIntent для проверки
         payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-        
+
         print('payment_intent', payment_intent)
 
         if payment_intent.status != 'succeeded':
@@ -173,6 +163,8 @@ def create_subscription():
 
         if not subscription:
             return jsonify({'message': 'Subscription creation failed'}), 202
+        
+        lg.add_logs(g.client_ip, g.user.id, 3000, f'Subscription create Plan: {plan} Sub_id: {subscription.id}')
 
         return jsonify({'message': 'Subscription created successfully', 'subscription_id': subscription.id}), 200
     except Exception as e:
