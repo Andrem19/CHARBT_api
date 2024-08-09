@@ -90,18 +90,6 @@ def checkout():
         planInstance = PaymentPlans.query.filter_by(name=payment_data['plan']).first()
         if not planInstance:
             return jsonify({'message': 'Plan is undefined'}), 202
-        
-        plan = ''
-        amount = 0
-
-        if payment_data['type'] == 'monthly':
-            plan = planInstance.price_id_month
-            amount = int(planInstance.price_subscription_month_1 * 100)  # Учитываем сумму из плана подписки
-        elif payment_data['type'] == 'annualy':
-            plan = planInstance.price_id_annualy
-            amount = int(planInstance.price_subscription_year_1 * 100)  # Учитываем сумму из плана подписки
-        else:
-            return jsonify({'message': 'Plan is undefined'}), 202
 
         customer = stripe.Customer.create(
             email=g.user.email,
@@ -117,20 +105,17 @@ def checkout():
             payment_method.id,
             customer=customer.id,
         )
-        payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
-            currency='usd',
+
+        setup_intent = stripe.SetupIntent.create(
             customer=customer.id,
             payment_method=payment_method.id,
-            setup_future_usage='off_session'
+            usage='off_session'
         )
-        print('payment_intent', payment_intent)
-        if not payment_intent:
-            return jsonify({'message': 'PaymentIntent creation failed'}), 202
 
-        return jsonify({'message': 'PaymentIntent created', 'client_secret': payment_intent.client_secret, 'payment_intent_id': payment_intent.id, 'customer_id': customer.id, 'plan': plan}), 200
+        return jsonify({'message': 'SetupIntent created', 'client_secret': setup_intent.client_secret, 'customer_id': customer.id, 'plan': planInstance.price_id_month}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
+
 
 @api.route('/create-subscription', methods=['POST'])
 def create_subscription():
@@ -139,21 +124,13 @@ def create_subscription():
 
         subscription_data = request.get_json()
 
-        payment_intent_id = subscription_data['payment_intent_id']
         customer_id = subscription_data['customer_id']
         plan = subscription_data['plan']
-
-        payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-
-        if payment_intent.status != 'succeeded':
-            return jsonify({'message': 'Payment not completed'}), 400
-
-        payment_method_id = payment_intent.payment_method
 
         subscription = stripe.Subscription.create(
             customer=customer_id,
             items=[{'price': plan}],
-            default_payment_method=payment_method_id
+            default_payment_method=subscription_data['payment_method_id']
         )
 
         if not subscription:
@@ -162,6 +139,7 @@ def create_subscription():
         return jsonify({'message': 'Subscription created successfully', 'subscription_id': subscription.id}), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 400
+
 
 
 
