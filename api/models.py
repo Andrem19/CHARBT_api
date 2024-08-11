@@ -416,6 +416,11 @@ def data_seed():
     **17. Service Interruptions
 
     We reserve the right to disable the website or certain features of the website for maintenance periods. During these times, the website or certain features may be unavailable.
+    
+    **18. Single Device Access**
+
+    Access to Charbt is allowed from only one device at a time. If you log in from another device, the session on the previous device will become invalid.
+    
     '''
 
     privacy_policy = TextDb(name='Privacy Policy', name_id='privacy_policy', text=pp, date=datetime.now().date())
@@ -438,9 +443,9 @@ def data_seed():
     plan2 = PaymentPlans(
         name='Premium', 
         token_price_day=15, 
-        price_id_month='price_1PluUaJlOCgKlIIvuJqrxlRU', 
+        price_id_month='price_1PmgyQJlOCgKlIIvVMGWZaep', 
         price_id_annualy='price_1PloYaJlOCgKlIIvimo1yNnb', 
-        price_subscription_month_1=1,#47.99, 
+        price_subscription_month_1=47.99, 
         price_subscription_year_1=575.88, 
         price_subscription_month_2=38.99, 
         price_subscription_year_2=467.88
