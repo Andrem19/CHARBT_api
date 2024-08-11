@@ -133,9 +133,9 @@ def cancel_subscription():
             return jsonify({'message': 'User not found or no active subscription'}), 404
 
         stripe.api_key = config('STRIPE_SECRET')
-
+        print('g.user.subscription_id', g.user.subscription_id)
         subscription = stripe.Subscription.retrieve(g.user.subscription_id)
-
+        print(str(subscription))
         # Check if the subscription is already cancelled
         if subscription.status == 'canceled' or subscription['cancel_at_period_end']:
             end_date = datetime.fromtimestamp(subscription.current_period_end).strftime('%Y-%m-%d')
