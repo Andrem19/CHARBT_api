@@ -586,7 +586,7 @@ def get_session_data():
                 data = asyncio.run(gd.load_data_sets_s3(path))
                 data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
                 data = data[data[:, 0].argsort()]
-
+                print('data: ', len(data))
                 # Check if we have enough candles before timestamp_open
                 index = np.searchsorted(data[:, 0], timestamp_open)
                 if index < 30:
@@ -602,7 +602,7 @@ def get_session_data():
 
                     # Combine the old and new data
                     data = np.concatenate((more_data, data))
-
+                print('data 2: ', len(data))
                 # Add buy_sell and profit columns
                 buy_sell = 1 if g.position.buy_sell == 'Buy' else 0
                 profit = 1 if g.position.profit > 0 else 0
