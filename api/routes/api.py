@@ -584,7 +584,7 @@ def get_session_data():
                 tm = serv.get_timeframe(g.position.timeframe)
                 path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
                 data = asyncio.run(gd.load_data_sets_s3(path))
-                data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
+                data = data[data[:, 0] > timestamp_open - 31 * g.position.timeframe*60*1000]
                 data = data[data[:, 0] < timestamp_open]
                 data = data[data[:, 0].argsort()]
                 print('data: ', len(data))
@@ -595,16 +595,11 @@ def get_session_data():
                     name, need_find_point = serv.find_file_containing_timestamp(data[0, 0] - g.position.timeframe*60*1000, files_map)
                     path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
                     more_data = asyncio.run(gd.load_data_sets_s3(path))
-                    # more_data = more_data[more_data[:, 0].argsort()]
 
-                    # Find the index to get 30 candles before timestamp_open
-                    # index = np.searchsorted(more_data[:, 0], data[0, 0])
-                    # more_data = more_data[index - 30:]
-
-                    # Combine the old and new data
                     data = np.concatenate((more_data, data))
-                    data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
+                    data = data[data[:, 0] > timestamp_open - 31 * g.position.timeframe*60*1000]
                     data = data[data[:, 0] < timestamp_open]
+                    data = data[data[:, 0].argsort()]
                 print('data 2: ', len(data))
                 # Add buy_sell and profit columns
                 buy_sell = 1 if g.position.buy_sell == 'Buy' else 0
