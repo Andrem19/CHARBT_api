@@ -565,7 +565,7 @@ def get_session_data():
             return jsonify({'message': 'Session not found'}), 404
 
         filename = f"session_{session_id}_data.csv"
-        with open(filename, mode='w') as file:
+        with open(filename, mode='w', newline='') as file:
             writer = csv.writer(file)
             headers = [f"{i}_{j}" for i in range(1, 101) for j in ["open", "high", "low", "close", "volume"]]
             headers.extend(["buy_sell", "profit"])
