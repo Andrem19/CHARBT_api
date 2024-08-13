@@ -610,6 +610,7 @@ def get_session_data():
                 for row in data:
                     row_data.extend(row[1:6])  # Exclude timestamp
                 row_data.extend([buy_sell, profit])
+                print('row lenth: ', len(row_data))
                 writer.writerow(row_data)
         
         @after_this_request
