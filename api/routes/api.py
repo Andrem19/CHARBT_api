@@ -608,7 +608,7 @@ def get_session_data():
                 profit = 1 if g.position.profit > 0 else 0
                 row_data = []
                 for row in data:
-                    row_data.extend(row[1:5])  # Exclude timestamp
+                    row_data.extend(row[1:6])  # Exclude timestamp
                 row_data.extend([buy_sell, profit])
                 writer.writerow(row_data)
         
