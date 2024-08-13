@@ -39,7 +39,7 @@ class BlogPost(db.Model):
     comments_on = db.Column(db.Boolean, default=False)
     user = db.relationship('User')
     poll = db.relationship('Poll', uselist=False, back_populates='blog_post')
-    comments = db.relationship('Comment', lazy=True)
+    comments = db.relationship('Comment', lazy=True, overlaps="blog_post,comments")
     pinned = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
@@ -62,7 +62,7 @@ class Poll(db.Model):
     question = db.Column(db.String(100), nullable=False)
     blog_post_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'), nullable=False)
     blog_post = db.relationship('BlogPost', back_populates='poll')
-    options = db.relationship('PollOption', cascade="all, delete-orphan")
+    options = db.relationship('PollOption', cascade="all, delete-orphan", overlaps="poll,options")
     disabled = db.Column(db.Boolean, default=False)
     to_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc) + timedelta(days=1))
     rewardPaid = db.Column(db.Boolean, default=False)
@@ -81,7 +81,7 @@ class PollOption(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     poll_id = db.Column(db.Integer, db.ForeignKey('poll.id'), nullable=False)
-    votes = db.relationship('Vote', cascade="all, delete-orphan")
+    votes = db.relationship('Vote', cascade="all, delete-orphan", overlaps="poll_option,votes")
     poll = db.relationship('Poll', backref=db.backref('poll_options', lazy=True))
 
     def to_dict(self):
@@ -97,7 +97,7 @@ class Vote(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     poll_option_id = db.Column(db.Integer, db.ForeignKey('poll_option.id'), nullable=False)
     user = db.relationship('User')
-    poll_option = db.relationship('PollOption')
+    poll_option = db.relationship('PollOption', overlaps="votes")
 
     def to_dict(self):
         return {
@@ -112,7 +112,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     blog_post_id = db.Column(db.Integer, db.ForeignKey('blog_post.id'), nullable=False)
     user = db.relationship('User')
-    blog_post = db.relationship('BlogPost')
+    blog_post = db.relationship('BlogPost', overlaps="comments")
 
     def to_dict(self):
         return {
