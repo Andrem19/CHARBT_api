@@ -567,7 +567,7 @@ def get_session_data():
         filename = f"session_{session_id}_data.csv"
         with open(filename, mode='w', newline='') as file:
             writer = csv.writer(file)
-            headers = [f"{i}_{j}" for i in range(1, 101) for j in ["open", "high", "low", "close", "volume"]]
+            headers = [f"{i}_{j}" for i in range(1, 31) for j in ["open", "high", "low", "close", "volume"]]
             headers.extend(["buy_sell", "profit"])
             writer.writerow(headers)
 
@@ -576,44 +576,41 @@ def get_session_data():
                 if position.user_id != g.user.id:
                     continue
 
-                @cache.memoize(timeout=7200)
-                def cached_function_position(position_id):
-                    timestamp_open = int(g.position.open_time) * 1000
-                    files_map = asyncio.run(gd.get_json_data(g.position.coin_pair, g.position.timeframe))
-                    name, need_find_point = serv.find_file_containing_timestamp(timestamp_open, files_map)
+                
+                timestamp_open = int(g.position.open_time) * 1000
+                files_map = asyncio.run(gd.get_json_data(g.position.coin_pair, g.position.timeframe))
+                name, need_find_point = serv.find_file_containing_timestamp(timestamp_open, files_map)
 
-                    tm = serv.get_timeframe(g.position.timeframe)
+                tm = serv.get_timeframe(g.position.timeframe)
+                path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
+                data = asyncio.run(gd.load_data_sets_s3(path))
+                data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
+                data = data[data[:, 0].argsort()]
+
+                # Check if we have enough candles before timestamp_open
+                index = np.searchsorted(data[:, 0], timestamp_open)
+                if index < 30:
+                    # If not enough candles, load the previous file
+                    name, need_find_point = serv.find_file_containing_timestamp(data[0, 0] - g.position.timeframe*60*1000, files_map)
                     path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
-                    data = asyncio.run(gd.load_data_sets_s3(path))
-                    data = data[data[:, 0] > timestamp_open - 100 * g.position.timeframe*60*1000]
-                    data = data[data[:, 0].argsort()]
+                    more_data = asyncio.run(gd.load_data_sets_s3(path))
+                    more_data = more_data[more_data[:, 0].argsort()]
 
-                    # Check if we have enough candles before timestamp_open
-                    index = np.searchsorted(data[:, 0], timestamp_open)
-                    if index < 100:
-                        # If not enough candles, load the previous file
-                        name, need_find_point = serv.find_file_containing_timestamp(data[0, 0] - g.position.timeframe*60*1000, files_map)
-                        path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
-                        more_data = asyncio.run(gd.load_data_sets_s3(path))
-                        more_data = more_data[more_data[:, 0].argsort()]
+                    # Find the index to get 100 candles before timestamp_open
+                    index = np.searchsorted(more_data[:, 0], data[0, 0])
+                    more_data = more_data[index - 30:]
 
-                        # Find the index to get 100 candles before timestamp_open
-                        index = np.searchsorted(more_data[:, 0], data[0, 0])
-                        more_data = more_data[index - 100:]
+                    # Combine the old and new data
+                    data = np.concatenate((more_data, data))
 
-                        # Combine the old and new data
-                        data = np.concatenate((more_data, data))
-
-                    # Add buy_sell and profit columns
-                    buy_sell = 1 if g.position.buy_sell == 'Buy' else 0
-                    profit = 1 if g.position.profit > 0 else 0
-                    row_data = []
-                    for row in data:
-                        row_data.extend(row[1:6])  # Exclude timestamp
-                    row_data.extend([buy_sell, profit])
-                    writer.writerow(row_data)
-
-                cached_function_position(g.position.id)
+                # Add buy_sell and profit columns
+                buy_sell = 1 if g.position.buy_sell == 'Buy' else 0
+                profit = 1 if g.position.profit > 0 else 0
+                row_data = []
+                for row in data:
+                    row_data.extend(row[1:5])  # Exclude timestamp
+                row_data.extend([buy_sell, profit])
+                writer.writerow(row_data)
         
         @after_this_request
         def remove_file(response):
