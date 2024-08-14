@@ -567,7 +567,7 @@ def get_session_data():
         filename = f"session_{session_id}_data.csv"
         with open(filename, mode='w', newline='') as file:
             writer = csv.writer(file)
-            headers = [f"{i}_{j}" for i in range(1, 31) for j in ["open", "high", "low", "close", "volume"]]
+            headers = [f"{i}_{j}" for i in range(1, 31) for j in ["time", "open", "high", "low", "close", "volume"]]
             headers.extend(["buy_sell", "profit"])
             writer.writerow(headers)
 
@@ -606,7 +606,7 @@ def get_session_data():
                 profit = 1 if g.position.profit > 0 else 0
                 row_data = []
                 for row in data:
-                    row_data.extend(row[1:6])  # Exclude timestamp
+                    row_data.extend(row)
                 row_data.extend([buy_sell, profit])
                 print('row lenth: ', len(row_data))
                 writer.writerow(row_data)
