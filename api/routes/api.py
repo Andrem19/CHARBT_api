@@ -590,7 +590,8 @@ def get_session_data():
                 print('data: ', len(data))
                 # Check if we have enough candles before timestamp_open
                 index = np.searchsorted(data[:, 0], timestamp_open)
-                if index < 30:
+                print('index: ', index)
+                if index < 29:
                     # If not enough candles, load the previous file
                     name, need_find_point = serv.find_file_containing_timestamp(data[0, 0] - g.position.timeframe*60*1000, files_map)
                     path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
