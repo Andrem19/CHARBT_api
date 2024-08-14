@@ -584,8 +584,8 @@ def get_session_data():
                 tm = serv.get_timeframe(g.position.timeframe)
                 path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
                 data = asyncio.run(gd.load_data_sets_s3(path))
-                data = data[data[:, 0] > timestamp_open - 31 * g.position.timeframe*60*1000]
-                data = data[data[:, 0] < timestamp_open]
+                data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
+                data = data[data[:, 0] <= timestamp_open]
                 data = data[data[:, 0].argsort()]
                 print('data: ', len(data))
                 # Check if we have enough candles before timestamp_open
@@ -597,8 +597,8 @@ def get_session_data():
                     more_data = asyncio.run(gd.load_data_sets_s3(path))
 
                     data = np.concatenate((more_data, data))
-                    data = data[data[:, 0] > timestamp_open - 31 * g.position.timeframe*60*1000]
-                    data = data[data[:, 0] < timestamp_open]
+                    data = data[data[:, 0] > timestamp_open - 30 * g.position.timeframe*60*1000]
+                    data = data[data[:, 0] <= timestamp_open]
                     data = data[data[:, 0].argsort()]
                 print('data 2: ', len(data))
                 # Add buy_sell and profit columns
