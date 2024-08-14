@@ -607,6 +607,7 @@ def get_session_data():
                 profit = 1 if g.position.profit > 0 else 0
                 row_data = []
                 for row in data:
+                    row[0] = int(row[0])
                     row_data.extend(row)
                 row_data.extend([buy_sell, profit])
                 print('row lenth: ', len(row_data))
