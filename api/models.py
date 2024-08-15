@@ -178,6 +178,7 @@ class Settings(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class SelfData(db.Model):
+    __tablename__ = 'selfdata'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), default='')
     cursor = db.Column(db.Integer, default=100)
