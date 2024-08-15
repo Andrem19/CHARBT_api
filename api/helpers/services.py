@@ -1,6 +1,9 @@
 import string
+from __init__ import s3
 import random
 import boto3
+import io
+import csv
 import os
 
 def allowed_file(filename):
@@ -119,3 +122,48 @@ def download_dir(prefix, local, bucket, client):
             os.makedirs(os.path.dirname(dest_pathname))
         client.download_file(bucket, k, dest_pathname)
 
+def check_folder(user_id: int):
+    try:
+        bucket = 'charbtmarketdata'
+        folder_prefix = 'SELF_DATA/'
+        user_folder = f"{folder_prefix}{user_id}/"
+        
+        # Получаем список объектов в указанном фолдере
+        response = s3.list_objects_v2(Bucket=bucket, Prefix=user_folder)
+        
+        # Проверяем, есть ли объекты в фолдере
+        if 'Contents' not in response:
+            return 0
+        
+        # Вычисляем общий размер объектов в фолдере
+        total_size = sum(obj['Size'] for obj in response['Contents'])
+        size_mb = total_size / (1024 * 1024)  # Преобразуем байты в мегабайты
+        
+        return size_mb
+    
+    except Exception as e:
+        print('Error in check_folder: ', e)
+        return 100000
+    
+def save_to_s3(processed_data, path):
+    try:
+        bucket = 'charbtmarketdata'
+        folder_prefix = 'SELF_DATA/'
+        # Преобразуем обработанные данные в CSV формат
+        csv_buffer = io.StringIO()
+        csv_writer = csv.writer(csv_buffer)
+        csv_writer.writerows(processed_data)
+        
+        # Получаем содержимое CSV в виде строки
+        csv_content = csv_buffer.getvalue()
+        
+        # Определяем полный путь в бакете
+        full_path = f"{folder_prefix}{path}"
+        
+        # Сохраняем данные в S3
+        s3.put_object(Bucket=bucket, Key=full_path, Body=csv_content)
+        
+        return True
+    except Exception as e:
+        print('Error in save_to_s3: ', e)
+        return False

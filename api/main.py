@@ -99,6 +99,7 @@ def create_app():
             logging.info(e)
 
     import routes.pub
+    import routes.selfdata
     import routes.api
     import routes.auth
     import routes.sub

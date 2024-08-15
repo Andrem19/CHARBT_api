@@ -63,6 +63,7 @@ def login():
             'registration_date': user.registration_date,
             'tokens': user.tokens,
             'badge': user.badge,
+            'data_size': user.data_size,
             'avatarLink': '' if user.avatarLink.split('_')[0] == 'start' else user.avatarLink,
             'subscription_to': user.subscription_to,
             'blogLastVisit': user.blogLastVisit,

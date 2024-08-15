@@ -147,6 +147,7 @@ class User(UserMixin, db.Model):
 
     current_session_id = db.Column(db.Integer)
     sessions = db.relationship('Session', backref='user', lazy='dynamic')
+    self_data = db.relationship('SelfData', backref='user', lazy='dynamic')
 
     ip_list = db.Column(db.String(1000))
     last_visit = db.Column(db.Integer, default=lambda: datetime.now().timestamp())
@@ -158,6 +159,8 @@ class User(UserMixin, db.Model):
 
     sessionCode = db.Column(db.String(80), default='')
     login_ip = db.Column(db.String(80))
+
+    data_size = db.Column(db.Integer, default=0)
 
     logs = db.relationship('Logs', backref='user', lazy='dynamic')
     add_info = db.Column(db.String(800), default='')
@@ -173,6 +176,14 @@ class Settings(db.Model):
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class SelfData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cursor = db.Column(db.Integer, default=100)
+    path = db.Column(db.String(800))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    size = db.Column(db.Integer, default=0)
+
     
 class GlobalSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -479,6 +490,7 @@ def data_seed():
     access15 = PlanAccess(paymentplans_id=plan1.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=False)
     access16 = PlanAccess(paymentplans_id=plan1.id, name='5 Minute Timeframe', description='Access to 5 minute timeframe', on=False)
     access17 = PlanAccess(paymentplans_id=plan1.id, name='1 Minute Timeframe', description='Access to 1 minute timeframe', on=False)
+    access18 = PlanAccess(paymentplans_id=plan1.id, name='Personal dataset', description='', on=False)
 
     db.session.add(access11)
     db.session.add(access12)
@@ -492,6 +504,7 @@ def data_seed():
     db.session.add(access123)
     db.session.add(access124)
     db.session.add(access125)
+    db.session.add(access18)
 
     db.session.commit()
     #============2 plan=================
@@ -507,6 +520,7 @@ def data_seed():
     access25 = PlanAccess(paymentplans_id=plan2.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
     access26 = PlanAccess(paymentplans_id=plan2.id, name='5 Minute Timeframe', description='Access to 5 minute timeframe', on=False)
     access27 = PlanAccess(paymentplans_id=plan2.id, name='1 Minute Timeframe', description='Access to 1 minute timeframe', on=False)
+    access28 = PlanAccess(paymentplans_id=plan1.id, name='Personal dataset', description='You can upload 200MB your data set for testing and simulation of the trading process', on=True)
 
     db.session.add(access21)
     db.session.add(access22)
@@ -520,6 +534,7 @@ def data_seed():
     db.session.add(access223)
     db.session.add(access224)
     db.session.add(access225)
+    db.session.add(access28)
 
     db.session.commit()
     #============3 plan=================
@@ -535,6 +550,7 @@ def data_seed():
     access35 = PlanAccess(paymentplans_id=plan3.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
     access36 = PlanAccess(paymentplans_id=plan3.id, name='5 Minute Timeframe', description='Access to 5 minute timeframe', on=True)
     access37 = PlanAccess(paymentplans_id=plan3.id, name='1 Minute Timeframe', description='Access to 1 minute timeframe', on=True)
+    access38 = PlanAccess(paymentplans_id=plan1.id, name='Personal dataset', description='You can upload 1GB your data set for testing and simulation of the trading process', on=True)
 
     db.session.add(access31)
     db.session.add(access32)
@@ -548,6 +564,7 @@ def data_seed():
     db.session.add(access323)
     db.session.add(access324)
     db.session.add(access325)
+    db.session.add(access38)
 
     db.session.commit()
 

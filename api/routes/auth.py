@@ -57,6 +57,7 @@ def verify():
             'name_changed': g.user.name_changed,
             'tokens': g.user.tokens,
             'badge': g.user.badge,
+            'data_size': g.user.data_size,
             'registration_date': g.user.registration_date,
             'avatarLink': '' if g.user.avatarLink.split('_')[0] == 'start' else g.user.avatarLink,
             'subscription_to': g.user.subscription_to,
