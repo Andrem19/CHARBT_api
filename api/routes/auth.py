@@ -64,7 +64,7 @@ def verify():
             'blogLastVisit': g.user.blogLastVisit,
         }
         datasets = []
-        for dt in g.user.self_data:
+        for dt in g.user.selfdata:
             data = { 'id': dt.id, 'name': dt.name, 'size': dt.size, 'cursor': dt.cursor }
             datasets.append(data)
         user_data['datasets'] = datasets
