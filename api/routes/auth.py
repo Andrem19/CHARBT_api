@@ -63,6 +63,12 @@ def verify():
             'subscription_to': g.user.subscription_to,
             'blogLastVisit': g.user.blogLastVisit,
         }
+        datasets = []
+        for dt in g.user.self_data:
+            data = { 'id': dt.id, 'name': dt.name, 'size': dt.size, 'cursor': dt.cursor }
+            datasets.append(data)
+        user_data['datasets'] = datasets
+
 
         if details in ['sessions', 'all']:
             sessions_data = []
