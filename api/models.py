@@ -147,7 +147,7 @@ class User(UserMixin, db.Model):
 
     current_session_id = db.Column(db.Integer)
     sessions = db.relationship('Session', backref='user', lazy='dynamic')
-    selfdata = db.relationship('SelfData', backref='user', lazy='dynamic')
+    selfdatas = db.relationship('SelfData', backref='user', lazy='dynamic')
 
     ip_list = db.Column(db.String(1000))
     last_visit = db.Column(db.Integer, default=lambda: datetime.now().timestamp())
