@@ -122,7 +122,7 @@ def download_dir(prefix, local, bucket, client):
             os.makedirs(os.path.dirname(dest_pathname))
         client.download_file(bucket, k, dest_pathname)
 
-def check_folder(user_id: int):
+def check_folder(user_id: int, name: str):
     try:
         bucket = 'charbtmarketdata'
         folder_prefix = 'SELF_DATA/'
@@ -166,4 +166,27 @@ def save_to_s3(processed_data, path):
         return True
     except Exception as e:
         print('Error in save_to_s3: ', e)
+        return False
+    
+def check_file_exists(user_id: int, name: str) -> bool:
+    try:
+        bucket = 'charbtmarketdata'
+        folder_prefix = 'SELF_DATA/'
+        user_folder = f"{folder_prefix}{user_id}/"
+        
+        # Получаем список объектов в указанном фолдере
+        response = s3.list_objects_v2(Bucket=bucket, Prefix=user_folder)
+        
+        # Проверяем, есть ли объекты в фолдере
+        if 'Contents' not in response:
+            return False
+        
+        # Проверяем наличие файла с таким же именем
+        for obj in response['Contents']:
+            if obj['Key'] == f"{user_folder}{name}":
+                return True
+        
+        return False
+    except Exception as e:
+        print('Error in check_file_exists: ', e)
         return False

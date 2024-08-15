@@ -209,6 +209,7 @@ class Session(db.Model):
     additional_timaframe = db.Column(db.Integer)
     positions = db.relationship('Position', backref='session', lazy='dynamic')
     cursor = db.Column(db.Integer, default=100)
+    is_self_data = db.Column(db.Boolean, default=False)
     add_info = db.Column(db.String(800), default='')
 
 class Position(db.Model):

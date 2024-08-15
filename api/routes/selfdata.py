@@ -97,17 +97,19 @@ def upload_data():
         processed_data = []
         for row in data:
             processed_row = [
-                row[timestamp_col],
-                row[open_col],
-                row[high_col],
-                row[low_col],
-                row[close_col],
-                row[volume_col]
+                row[timestamp_col-1],
+                row[open_col-1],
+                row[high_col-1],
+                row[low_col-1],
+                row[close_col-1],
+                row[volume_col-1]
             ]
             processed_data.append(processed_row)
         
+        if serv.check_file_exists(g.user.id, name):
+            return jsonify({'message': 'Name is already exist in your set'}), 404
 
-        size_mb_exist = serv.check_folder(g.user.id)
+        size_mb_exist = serv.check_folder(g.user.id, name)
         total_size = size_mb_exist + original_size_mb
         if (g.user.payment_status.lower() == 'premium-plus' and total_size>=1000) or (g.user.payment_status.lower() == 'premium' and total_size>=200):
             return jsonify({'message': 'You have reached your limit or want to exceed it. increase your limit or upgrade to a plan with a higher data limit.'}), 404
