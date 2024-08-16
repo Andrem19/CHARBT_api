@@ -152,6 +152,7 @@ def save_cursor():
         
         session.cursor = cursor
         db.session.commit()
+        return jsonify({'message': 'Cursor saved successfully'}), 200
     except Exception as e:
         logging.error(e, exc_info=True)
         return jsonify({'message': 'Internal server error'}), 500
