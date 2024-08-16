@@ -1,4 +1,4 @@
-from models import SelfData
+from models import SelfData, Session
 import logging
 import csv
 from flask import jsonify, request, jsonify, g
@@ -108,6 +108,8 @@ def upload_data():
         
         if serv.check_file_exists(g.user.id, name):
             return jsonify({'message': 'Name is already exist in your set'}), 404
+        if '.csv' not in name:
+            return jsonify({'message': 'The file extension must be .csv'}), 404
 
         size_mb_exist = serv.check_folder(g.user.id, name)
         total_size = size_mb_exist + original_size_mb
@@ -126,6 +128,25 @@ def upload_data():
         else:
             return jsonify({'message': 'Something went wrong while loading'}), 404
 
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        return jsonify({'message': 'Internal server error'}), 500
+    
+@api.route('/save_cursor', methods=['POST'])
+def save_cursor():
+    try:
+        session_id = int(request.form.get('timestamp'))
+        cursor = int(request.form.get('open'))
+
+        session = Session.query.get(session_id)
+        if not session or session.user_id != g.user.id:
+            return jsonify({'message': 'Session not found or not owned by the current user'}), 404
+        
+        if not session.is_self_data:
+            return jsonify({'message': 'The session must be based on personal data to save the cursor history'}), 404
+        
+        session.cursor = cursor
+        db.session.commit()
     except Exception as e:
         logging.error(e, exc_info=True)
         return jsonify({'message': 'Internal server error'}), 500

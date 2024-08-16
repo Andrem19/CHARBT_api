@@ -82,6 +82,7 @@ def add_session():
         session_name = request.json.get('name', f'{g.user.username}_{serv.random_string().upper()}')
         coin_pair = request.json.get('coin_pair', 'BTCUSDT')
         timeframe = int(request.json.get('timeframe', 1440))
+        is_self_data = request.json.get('is_self_data', False)
         adTm = {
             1: 60,
             5: 60,
@@ -113,7 +114,7 @@ def add_session():
         elif g.user.payment_status == 'premium-plus':
             balance = 5000
 
-        session = Session(user_id=g.user.id, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
+        session = Session(user_id=g.user.id, is_self_data=is_self_data, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
         try:
             db.session.add(session)
             db.session.commit()
@@ -132,6 +133,7 @@ def add_session():
             'additional_timaframe': session.additional_timaframe,
             'session_name': session.session_name,
             'balance': session.balance,
+            'is_self_data': is_self_data,
             'current_PnL': session.current_PnL,
             'positions': []
         }

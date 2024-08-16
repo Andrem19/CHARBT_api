@@ -65,7 +65,7 @@ def verify():
         }
         datasets = []
         for dt in g.user.selfdatas:
-            data = { 'id': dt.id, 'name': dt.name, 'size': dt.size, 'cursor': dt.cursor }
+            data = { 'id': dt.id, 'name': dt.name, 'size': dt.size }
             datasets.append(data)
         user_data['datasets'] = datasets
 
