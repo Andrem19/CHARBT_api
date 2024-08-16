@@ -29,7 +29,7 @@ def get_session(session_id):
         return jsonify({'message': 'Session not found'}), 404
 
     positions_data = [{'id': position.id, 'session_id': position.session_id, 'volatility': position.volatility, 'amount': position.amount, 'open_time': position.open_time, 'close_time': position.close_time, 'open_price': position.open_price, 'user_id': position.user_id, 'timeframe': position.timeframe, 'close_price': position.close_price, 'type_of_close': position.type_of_close, 'coin_pair': position.coin_pair, 'profit': position.profit, 'buy_sell': position.buy_sell} for position in session.positions]
-    session_data = {'id': session.id, 'is_self_data': session.is_self_data, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': positions_data}
+    session_data = {'id': session.id, 'selfDataId': session.selfDataId, 'is_self_data': session.is_self_data, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': positions_data}
 
     g.user.current_session_id = int(session_id)
     db.session.commit()
@@ -83,6 +83,9 @@ def add_session():
         coin_pair = request.json.get('coin_pair', 'BTCUSDT')
         timeframe = int(request.json.get('timeframe', 1440))
         is_self_data = request.json.get('is_self_data', False)
+        data_id = request.json.get('data_id', 0)
+        if is_self_data:
+            timeframe = 60
         adTm = {
             1: 60,
             5: 60,
@@ -114,7 +117,8 @@ def add_session():
         elif g.user.payment_status == 'premium-plus':
             balance = 5000
 
-        session = Session(user_id=g.user.id, is_self_data=is_self_data, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
+
+        session = Session(user_id=g.user.id, selfDataId=data_id, is_self_data=is_self_data, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
         try:
             db.session.add(session)
             db.session.commit()
@@ -135,6 +139,7 @@ def add_session():
             'balance': session.balance,
             'is_self_data': is_self_data,
             'current_PnL': session.current_PnL,
+            'selfDataId': session.selfDataId,
             'positions': []
         }
 
