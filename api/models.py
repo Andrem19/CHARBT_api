@@ -209,7 +209,7 @@ class Session(db.Model):
     positions = db.relationship('Position', backref='session', lazy='dynamic')
     cursor = db.Column(db.Integer, default=100)
     is_self_data = db.Column(db.Boolean, default=False)
-    selfDataId = db.Column(db.Integer, default=0)
+    selfdataid = db.Column(db.Integer, default=0)
     add_info = db.Column(db.String(800), default='')
 
 class Position(db.Model):
