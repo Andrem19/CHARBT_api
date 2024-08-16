@@ -27,7 +27,12 @@ def download_data(selfdata_id):
             
 
             csv_reader = csv.reader(io.StringIO(csv_content))
-            data = [row for row in csv_reader]
+
+            data = []
+            for row in csv_reader:
+                converted_row = [int(row[0])] + [float(value) for value in row[1:]]
+                data.append(converted_row)
+                
             return jsonify({'data': data}), 200
         
         return cached_data_return(selfdata_id)
