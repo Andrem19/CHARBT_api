@@ -118,7 +118,7 @@ def upload_data():
 
         g.user.data_size = total_size
         path=f'{g.user.id}/{name}'
-        self_data = SelfData(name=name, cursor=100, path=path, user_id=g.user.id, size=original_size_mb)
+        self_data = SelfData(name=name, path=path, user_id=g.user.id, size=original_size_mb)
         db.session.add(self_data)
         db.session.commit()
 
