@@ -181,7 +181,6 @@ class SelfData(db.Model):
     __tablename__ = 'selfdata'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), default='')
-    cursor = db.Column(db.Integer, default=100)
     path = db.Column(db.String(800))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     size = db.Column(db.Integer, default=0)

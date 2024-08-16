@@ -1,4 +1,4 @@
-from models import SelfData, Session
+from models import SelfData, Session, Position
 import logging
 import csv
 from flask import jsonify, request, jsonify, g
@@ -150,3 +150,58 @@ def save_cursor():
     except Exception as e:
         logging.error(e, exc_info=True)
         return jsonify({'message': 'Internal server error'}), 500
+    
+
+@api.route('/position_self_data', methods=['GET'])
+def position_self_data():
+    try:
+        position_id = request.args.get('position_id')
+
+        position = Position.query.get(position_id)
+        if not position:
+            return jsonify({'message': 'Position not found'}), 404
+        g.position = position
+        if position.user_id != g.user.id:
+            return jsonify({'message': 'This position does not belong to the user'}), 404
+        
+        
+        @cache.memoize(timeout=7200)
+        def cached_function_position(position_id):
+            bucket = 'charbtmarketdata'
+            folder_prefix = 'SELF_DATA/'
+            timestamp_open = int(g.position.open_time) * 1000
+
+            coin_pair = g.position.coin_pair
+
+            dataset_info = SelfData.query.filter_by(name=coin_pair).first()
+
+            if not dataset_info:
+                return jsonify({'message': 'Dataset was deleted or never exist'}), 404
+            
+            if dataset_info.user_id != g.user.id:
+                return jsonify({'message': 'Data not belong to user'}), 404
+            
+            full_path = f"{folder_prefix}{dataset_info.path}"
+            
+            response = s3.get_object(Bucket=bucket, Key=full_path)
+            csv_content = response['Body'].read().decode('utf-8')
+            
+
+            csv_reader = csv.reader(io.StringIO(csv_content))
+            data = [row for row in csv_reader]
+            data = sorted(data, key=lambda x: int(x[0]))
+
+            index_open = next((i for i, row in enumerate(data) if int(row[0]) == timestamp_open), None)
+            if index_open is None:
+                return jsonify({'message': 'Timestamp open not found in data'}), 404
+
+            start_index = max(0, index_open - 100)
+
+            sliced_data = data[start_index:index_open + 1]
+
+            return jsonify({'data': sliced_data}), 200
+        
+        return cached_function_position(g.position.id)
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
