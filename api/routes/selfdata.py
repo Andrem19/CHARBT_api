@@ -140,8 +140,8 @@ def upload_data():
 @api.route('/save_cursor', methods=['POST'])
 def save_cursor():
     try:
-        session_id = int(request.form.get('session_id'))
-        cursor = int(request.form.get('cursor'))
+        session_id = int(request.json.get('session_id'))
+        cursor = int(request.json.get('cursor'))
 
         session = Session.query.get(session_id)
         if not session or session.user_id != g.user.id:
