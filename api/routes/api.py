@@ -141,6 +141,7 @@ def add_session():
             'is_self_data': is_self_data,
             'current_PnL': session.current_PnL,
             'selfDataId': session.selfdataid,
+            'decimal_places': session.decimal_places,
             'positions': []
         }
 
