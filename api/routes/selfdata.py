@@ -59,8 +59,17 @@ def delete_data(selfdata_id):
         full_path = f"{folder_prefix}{self_data.path}"
         
         s3.delete_object(Bucket=bucket, Key=full_path)
+
+        sessions = Session.query.filter_by(selfdataid=selfdata_id).all()
+        for session in sessions:
+            Position.query.filter_by(session_id=session.id).delete()
+            db.session.delete(session)
+        
+        previous_session = Session.query.filter(Session.user_id == g.user.id).order_by(Session.id.desc()).first()
+        g.user.current_session_id = previous_session.id
         
         db.session.delete(self_data)
+
         db.session.commit()
         
         return jsonify({'message': 'Data successfully deleted'}), 200
@@ -86,8 +95,8 @@ def upload_data():
 
         original_size = len(file.read())
         original_size_mb = original_size / (1024 * 1024)
-        if original_size_mb > 5:
-            return jsonify({'message': 'The data file should not be larger than 5MB'}), 404
+        if original_size_mb > 2.5:
+            return jsonify({'message': 'The data file should not be larger than 2.5MB'}), 404
         
         file.seek(0)
         

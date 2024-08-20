@@ -29,7 +29,7 @@ def get_session(session_id):
         return jsonify({'message': 'Session not found'}), 404
 
     positions_data = [{'id': position.id, 'session_id': position.session_id, 'volatility': position.volatility, 'amount': position.amount, 'open_time': position.open_time, 'close_time': position.close_time, 'open_price': position.open_price, 'user_id': position.user_id, 'timeframe': position.timeframe, 'close_price': position.close_price, 'type_of_close': position.type_of_close, 'coin_pair': position.coin_pair, 'profit': position.profit, 'buy_sell': position.buy_sell} for position in session.positions]
-    session_data = {'id': session.id, 'selfDataId': session.selfdataid, 'is_self_data': session.is_self_data, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': positions_data}
+    session_data = {'id': session.id, 'decimal_places': session.decimal_places, 'selfDataId': session.selfdataid, 'is_self_data': session.is_self_data, 'coin_pair': session.coin_pair, 'timeframe': session.timeframe, 'additional_timaframe': session.additional_timaframe, 'cursor': session.cursor, 'balance': session.balance, 'current_PnL': session.current_PnL, 'positions': positions_data}
 
     g.user.current_session_id = int(session_id)
     db.session.commit()
@@ -84,6 +84,7 @@ def add_session():
         timeframe = int(request.json.get('timeframe', 1440))
         is_self_data = request.json.get('is_self_data', False)
         data_id = request.json.get('data_id', 0)
+        decimal_places = int(request.json.get('decimal_places', 2))
         if is_self_data:
             timeframe = 60
         adTm = {
@@ -118,7 +119,7 @@ def add_session():
             balance = 5000
 
 
-        session = Session(user_id=g.user.id, selfdataid=data_id, is_self_data=is_self_data, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
+        session = Session(user_id=g.user.id, decimal_places=decimal_places, selfdataid=data_id, is_self_data=is_self_data, session_name=session_name, balance=balance, coin_pair=coin_pair, timeframe=timeframe, additional_timaframe=additional_timaframe,  current_PnL=0)
         try:
             db.session.add(session)
             db.session.commit()
@@ -162,7 +163,6 @@ def delete_session(session_id):
         if not previous_session:
             previous_session = Session.query.filter(Session.user_id == g.user.id).order_by(Session.id.desc()).first()
         g.user.current_session_id = previous_session.id
-
     try:
         Position.query.filter_by(session_id=session.id).delete()
         db.session.delete(session)

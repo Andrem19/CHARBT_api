@@ -210,6 +210,7 @@ class Session(db.Model):
     cursor = db.Column(db.Integer, default=100)
     is_self_data = db.Column(db.Boolean, default=False)
     selfdataid = db.Column(db.Integer, default=0)
+    decimal_places = db.Column(db.Integer, default=2)
     add_info = db.Column(db.String(800), default='')
 
 class Position(db.Model):
