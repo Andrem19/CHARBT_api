@@ -170,7 +170,7 @@ def delete_session(session_id):
     except Exception as e:
         return jsonify({'message': 'An error occurred while deleting the session', 'error': str(e)}), 500
 
-    return jsonify({'message': 'Session deleted successfully'}), 200
+    return jsonify({'message': 'Session deleted successfully', 'current_session': g.user.current_session_id}), 200
 
 
 
