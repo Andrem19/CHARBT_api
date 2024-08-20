@@ -430,14 +430,12 @@ def get_position_data():
                 path = f'SERVER_SET/{g.position.coin_pair}/{tm}/{name}'
                 more_data = asyncio.run(gd.load_data_sets_s3(path))
                 more_data = more_data[more_data[:, 0].argsort()]
-                print('more data 2', len(more_data))
                 # Объединяем старые и новые данные
                 data = np.concatenate((data, more_data))
 
             # Отсекаем данные, которые находятся за пределами нашего интересующего диапазона
             data = data[data[:, 0] >= timestamp_open - 100 * g.position.timeframe*60*1000]
             data = data[data[:, 0] <= timestamp_close]
-            print('finish data', len(data))
             return jsonify({'data': data.tolist()}), 200
         
         return cached_function_position(g.position.id)

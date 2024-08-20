@@ -185,6 +185,7 @@ def position_self_data():
             bucket = 'charbtmarketdata'
             folder_prefix = 'SELF_DATA/'
             timestamp_open = int(g.position.open_time) * 1000
+            timestamp_close = int(g.position.close_time) * 1000
 
             coin_pair = g.position.coin_pair
 
@@ -212,12 +213,13 @@ def position_self_data():
             data = sorted(data, key=lambda x: int(x[0]))
 
             index_open = next((i for i, row in enumerate(data) if int(row[0]) == timestamp_open), None)
+            index_close = next((i for i, row in enumerate(data) if int(row[0]) == timestamp_close), None)
             if index_open is None:
                 return jsonify({'message': 'Timestamp open not found in data'}), 404
 
             start_index = max(0, index_open - 100)
 
-            sliced_data = data[start_index:index_open + 1]
+            sliced_data = data[start_index:index_close + 1]
 
 
             return jsonify({'data': sliced_data}), 200
