@@ -203,7 +203,12 @@ def position_self_data():
             
 
             csv_reader = csv.reader(io.StringIO(csv_content))
-            data = [row for row in csv_reader]
+
+            data = []
+            for row in csv_reader:
+                converted_row = [int(row[0])] + [float(value) for value in row[1:]]
+                data.append(converted_row)
+
             data = sorted(data, key=lambda x: int(x[0]))
 
             index_open = next((i for i, row in enumerate(data) if int(row[0]) == timestamp_open), None)
@@ -213,6 +218,7 @@ def position_self_data():
             start_index = max(0, index_open - 100)
 
             sliced_data = data[start_index:index_open + 1]
+
 
             return jsonify({'data': sliced_data}), 200
         
