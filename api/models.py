@@ -524,7 +524,7 @@ def data_seed():
     access25 = PlanAccess(paymentplans_id=plan2.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
     access26 = PlanAccess(paymentplans_id=plan2.id, name='5 Minute Timeframe', description='Access to 5 minute timeframe', on=False)
     access27 = PlanAccess(paymentplans_id=plan2.id, name='1 Minute Timeframe', description='Access to 1 minute timeframe', on=False)
-    access28 = PlanAccess(paymentplans_id=plan1.id, name='Personal dataset', description='You can upload 200MB your data set for testing and simulation of the trading process', on=True)
+    access28 = PlanAccess(paymentplans_id=plan2.id, name='Personal dataset', description='You can upload 200MB your data set for testing and simulation of the trading process', on=True)
 
     db.session.add(access21)
     db.session.add(access22)
@@ -554,7 +554,7 @@ def data_seed():
     access35 = PlanAccess(paymentplans_id=plan3.id, name='30 Minute Timeframe', description='Access to 30 minute timeframe', on=True)
     access36 = PlanAccess(paymentplans_id=plan3.id, name='5 Minute Timeframe', description='Access to 5 minute timeframe', on=True)
     access37 = PlanAccess(paymentplans_id=plan3.id, name='1 Minute Timeframe', description='Access to 1 minute timeframe', on=True)
-    access38 = PlanAccess(paymentplans_id=plan1.id, name='Personal dataset', description='You can upload 1GB your data set for testing and simulation of the trading process', on=True)
+    access38 = PlanAccess(paymentplans_id=plan3.id, name='Personal dataset', description='You can upload 1GB your data set for testing and simulation of the trading process', on=True)
 
     db.session.add(access31)
     db.session.add(access32)

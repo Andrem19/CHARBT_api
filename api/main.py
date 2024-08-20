@@ -91,9 +91,9 @@ def create_app():
     with app.app_context():
         
         try:
-            # db.drop_all()
-            # db.create_all()
-            # data_seed()
+            db.drop_all()
+            db.create_all()
+            data_seed()
             pass
         except Exception as e:
             logging.info(e)
