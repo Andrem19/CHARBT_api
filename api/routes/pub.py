@@ -42,6 +42,7 @@ def login():
 
         # client_ip = request.remote_addr
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        print('login', client_ip)
         clients_ips = json.loads(user.ip_list)
         if client_ip not in clients_ips:
             if len(clients_ips)< 6:

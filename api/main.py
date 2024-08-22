@@ -135,6 +135,7 @@ def create_app():
     @jwt_required()
     def before_request_api():
         g.client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        print('api.before_request', g.client_ip)
         is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
         if is_banned:
             return response, status_code
