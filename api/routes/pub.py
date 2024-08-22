@@ -90,7 +90,7 @@ def login():
         user.login_ip = client_ip
         db.session.commit()
 
-        lg.add_logs(g.client_ip, user.id, 1000, 'login')
+        lg.add_logs(client_ip, user.id, 1000, 'login')
 
         return jsonify({'jwt': token, 'data': user_data}), 200
     except Exception as e:
