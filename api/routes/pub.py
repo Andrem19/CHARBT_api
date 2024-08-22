@@ -40,7 +40,8 @@ def login():
         if not user.email_confirmed:
             return jsonify({'data': 'Please confirm your email'}), 202
 
-        client_ip = request.remote_addr
+        # client_ip = request.remote_addr
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         clients_ips = json.loads(user.ip_list)
         if client_ip not in clients_ips:
             if len(clients_ips)< 6:

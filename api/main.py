@@ -108,14 +108,14 @@ def create_app():
 
     @pub.before_request
     def before_request_pub():
-        g.client_ip = request.remote_addr
+        g.client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
         if is_banned:
             return response, status_code
 
     @adm.before_request
     def before_request_adm():
-        g.client_ip = request.remote_addr
+        g.client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         allowedIp = AllowedIp.query.all()
         ip_list = [u.ip for u in allowedIp]
         # if g.client_ip not in ip_list:
@@ -134,7 +134,7 @@ def create_app():
     @api.before_request
     @jwt_required()
     def before_request_api():
-        g.client_ip = request.remote_addr
+        g.client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
         if is_banned:
             return response, status_code
