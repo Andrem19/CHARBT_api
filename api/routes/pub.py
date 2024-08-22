@@ -48,7 +48,9 @@ def login():
             return jsonify({'data': 'Please confirm your email'}), 202
 
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-
+        if client_ip:
+            client_ip = client_ip.split(',')[0].strip()
+        print('login', client_ip)
         is_banned, response, status_code = check_ip_in_blacklist(client_ip)
         if is_banned:
             return response, status_code
