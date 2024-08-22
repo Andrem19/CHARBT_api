@@ -53,7 +53,6 @@ def login():
         if is_banned:
             return response, status_code
         
-        print('login', client_ip)
         clients_ips = json.loads(user.ip_list)
         if client_ip not in clients_ips:
             if len(clients_ips)< 6:
@@ -88,7 +87,7 @@ def login():
         token = create_access_token(identity=identity, expires_delta=expires)
 
         user.sessionCode = sessionCode
-        user.login_ip = g.client_ip
+        user.login_ip = client_ip
         db.session.commit()
 
         lg.add_logs(g.client_ip, user.id, 1000, 'login')
