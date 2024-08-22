@@ -151,8 +151,8 @@ def create_app():
                     return jsonify({'message': 'User not found or jwt token not valid'}), 407
                 if session_code != user.sessionCode:
                     return jsonify({'message': 'User_Session not found'}), 407
-                if g.client_ip != user.login_ip:
-                    return jsonify({'message': 'Login ip was changed please log in'}), 407
+                # if g.client_ip != user.login_ip:
+                #     return jsonify({'message': 'Login ip was changed please log in'}), 407
                 g.user = user
 
             except Exception as e:
