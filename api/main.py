@@ -108,10 +108,11 @@ def create_app():
 
     @pub.before_request
     def before_request_pub():
-        g.client_ip = request.remote_addr
-        is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
-        if is_banned:
-            return response, status_code
+        pass
+        # g.client_ip = request.remote_addr
+        # is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
+        # if is_banned:
+        #     return response, status_code
 
     @adm.before_request
     def before_request_adm():
@@ -134,11 +135,10 @@ def create_app():
     @api.before_request
     @jwt_required()
     def before_request_api():
-        g.client_ip = request.remote_addr
-        print('api.before_request', g.client_ip)
-        is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
-        if is_banned:
-            return response, status_code
+        # g.client_ip = request.remote_addr
+        # is_banned, response, status_code = check_ip_in_blacklist(g.client_ip)
+        # if is_banned:
+        #     return response, status_code
         
         if request.method != 'OPTIONS':
             try:

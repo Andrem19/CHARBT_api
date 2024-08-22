@@ -1,4 +1,4 @@
-from models import User, Session, PaymentPlans, TextDb, Settings, BlogPost, GlobalSettings
+from models import User, Session, PaymentPlans, TextDb, Settings, BlogPost, GlobalSettings, BlackList
 import logging
 from decouple import config
 import time
@@ -15,6 +15,7 @@ from werkzeug.exceptions import BadRequest
 from __init__ import db, cache, pub
 import helpers.services as serv
 import helpers.logs as lg
+from datetime import datetime
 import json
 
 @pub.route('/get_global_settings', methods=['GET'])
@@ -25,6 +26,12 @@ def get_global_settings():
         return jsonify(settings.to_dict())
     else:
         return jsonify({"error": "No settings found"}), 404
+    
+def check_ip_in_blacklist(ip):
+    blacklist = BlackList.query.filter_by(ip=ip).first()
+    if blacklist and blacklist.to >= datetime.now():
+        return True, jsonify({'message': 'Your IP is banned until ' + blacklist.to.strftime('%Y-%m-%d %H:%M:%S')}), 403
+    return False, None, None
 
 
 @pub.route('/login', methods=['POST'])
@@ -40,8 +47,12 @@ def login():
         if not user.email_confirmed:
             return jsonify({'data': 'Please confirm your email'}), 202
 
-        # client_ip = request.remote_addr
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+        is_banned, response, status_code = check_ip_in_blacklist(client_ip)
+        if is_banned:
+            return response, status_code
+        
         print('login', client_ip)
         clients_ips = json.loads(user.ip_list)
         if client_ip not in clients_ips:
