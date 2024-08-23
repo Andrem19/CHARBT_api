@@ -11,6 +11,7 @@ python-decouple==3.8
 SQLAlchemy==2.0.27
 Werkzeug==3.0.3
 flask_cors
+python-telegram-bot
 flask_apscheduler
 psycopg2-binary
 boto3
