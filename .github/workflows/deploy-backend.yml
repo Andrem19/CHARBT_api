@@ -35,6 +35,7 @@ jobs:
                STRIPE_ENDPOINT_DELETED=${{ secrets.STRIPE_ENDPOINT_DELETED }} \
                STRIPE_ENDPOINT_CANCELED=${{ secrets.STRIPE_ENDPOINT_CANCELED }} \
                STRIPE_ENDPOINT_COMPLITE=${{ secrets.STRIPE_ENDPOINT_COMPLITE }} \
+               TELEGRAM_API=${{ secrets.TELEGRAM_API }} \
                docker-compose -f docker-compose.prod.yml down
           sudo SECRET_KEY=${{ secrets.SECRET_KEY }} \
                AWS_ACCES_KEY=${{ secrets.AWS_ACCES_KEY }} \
@@ -45,5 +46,6 @@ jobs:
                STRIPE_ENDPOINT_DELETED=${{ secrets.STRIPE_ENDPOINT_DELETED }} \
                STRIPE_ENDPOINT_CANCELED=${{ secrets.STRIPE_ENDPOINT_CANCELED }} \
                STRIPE_ENDPOINT_COMPLITE=${{ secrets.STRIPE_ENDPOINT_COMPLITE }} \
+               TELEGRAM_API=${{ secrets.TELEGRAM_API }} \
                docker-compose -f docker-compose.prod.yml up --build -d
           EOF
