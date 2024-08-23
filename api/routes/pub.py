@@ -5,6 +5,7 @@ import time
 import stripe
 import helpers.tel as tel
 from datetime import timedelta
+import asyncio
 from flask import jsonify, redirect, request, jsonify, abort, g, make_response, after_this_request
 import helpers.email_service as emserv
 import uuid
@@ -195,7 +196,7 @@ def confirm_email():
 
     @after_this_request
     def send_telegram_notification(response):
-        executor.submit(tel.send_inform_message, msg, '', False)
+        executor.submit(asyncio.run, tel.send_inform_message(msg, '', False))
         return response
 
     return redirect(f"{https}://{link}/login?emailVerified=true")
