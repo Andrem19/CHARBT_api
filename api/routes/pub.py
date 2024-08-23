@@ -3,16 +3,16 @@ import logging
 from decouple import config
 import time
 import stripe
-
+import helpers.tel as tel
 from datetime import timedelta
-from flask import jsonify, redirect, request, jsonify, abort, g, make_response
+from flask import jsonify, redirect, request, jsonify, abort, g, make_response, after_this_request
 import helpers.email_service as emserv
 import uuid
 from functools import wraps
 from flask_jwt_extended import create_access_token, decode_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import BadRequest
-from __init__ import db, cache, pub
+from __init__ import db, cache, pub, executor
 import helpers.services as serv
 import helpers.logs as lg
 from datetime import datetime
@@ -50,7 +50,7 @@ def login():
         client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
         if client_ip:
             client_ip = client_ip.split(',')[0].strip()
-        print('login', client_ip)
+        
         is_banned, response, status_code = check_ip_in_blacklist(client_ip)
         if is_banned:
             return response, status_code
@@ -190,6 +190,14 @@ def confirm_email():
     env = config('ENV')
     link = 'charbt.com' if env == 'production' else 'localhost:3000'
     https = 'https' if env == 'production' else 'http'
+
+    msg = f'✔ New user registred. {user.username}, {user.email}'
+
+    @after_this_request
+    def send_telegram_notification(response):
+        executor.submit(tel.send_inform_message, msg, '', False)
+        return response
+
     return redirect(f"{https}://{link}/login?emailVerified=true")
 
 @pub.route('/get_text', methods=['GET'])
@@ -425,4 +433,3 @@ def get_blog_posts():
         return jsonify(blog_data), 200
     except Exception as e:
         return make_response(jsonify({'Message': e}), 500)
-

@@ -9,9 +9,11 @@ import random
 import numpy as np
 import string
 import os
+import helpers.tel as tel
 from flask import jsonify, request, jsonify, g, after_this_request
 from botocore.exceptions import BotoCoreError, ClientError
 import random
+import helpers.email_service as emserv
 from functools import wraps
 from flask_jwt_extended import jwt_required
 from __init__ import db, s3, cache, api
@@ -632,3 +634,9 @@ def get_session_data():
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+
+@api.route('/tester', methods=['GET'])
+def submit_tester():
+    emserv.send_servce_info_msg(g.user.email, 'service@charbt.com', 'You are on the waiting list for testing our app. As soon as we launch testing, you will receive all the information you need to this email.')
+    asyncio.run(tel.send_inform_message(f'TESTER: {g.user.email}', '', False))
