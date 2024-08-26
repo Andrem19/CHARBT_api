@@ -437,7 +437,7 @@ def get_blog_posts():
         return make_response(jsonify({'Message': e}), 500)
     
 
-@pub.route('/pub_data', method=['GET'])
+@pub.route('/pub_data', methods=['GET'])
 def pub_data():
     data = cache.get('cached_init_data')
     if data is not None:
