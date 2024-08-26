@@ -5,6 +5,7 @@ import time
 import stripe
 import helpers.tel as tel
 from datetime import timedelta
+import helpers.get_data as gd
 import asyncio
 from flask import jsonify, redirect, request, jsonify, abort, g, make_response, after_this_request
 import helpers.email_service as emserv
@@ -434,3 +435,20 @@ def get_blog_posts():
         return jsonify(blog_data), 200
     except Exception as e:
         return make_response(jsonify({'Message': e}), 500)
+    
+
+@pub.route('/pub_data', method=['GET'])
+def pub_data():
+    data = cache.get('cached_init_data')
+    if data is not None:
+        response = {'data': data.tolist()}
+    if data is None:
+        path = '/app/SERVER_SET/1577836800000_1717113600000.csv'
+        data = asyncio.run(gd.load_data_sets(path))
+        data = data[:200]
+        data = data[data[:, 0].argsort()]
+        cache.set('cached_init_data', data)
+        response = {'data': data.tolist()}
+        return jsonify(response), 200
+    else:
+        return jsonify(response), 200

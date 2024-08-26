@@ -641,3 +641,4 @@ def submit_tester():
     emserv.send_servce_info_msg(g.user.email, 'service@charbt.com', 'You are on the waiting list for testing our app. As soon as we launch testing, you will receive all the information you need to this email.')
     asyncio.run(tel.send_inform_message(f'TESTER: {g.user.email}', '', False))
     return jsonify({'message': 'success'}), 200
+
