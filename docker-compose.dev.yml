@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    volumes:
+      - server_data:/app/SERVER_SET
+    environment:
+      - ENV=development
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://charbt:charbt@postgres:5432/charbt_db}
+      - AWS_ACCES_KEY=${AWS_ACCES_KEY:-}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY:-}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD:-}
+      - STRIPE_KEY=${STRIPE_KEY:-}
+      - STRIPE_SECRET=${STRIPE_SECRET:-}
+      - STRIPE_ENDPOINT_DELETED=${STRIPE_ENDPOINT_DELETED:-}
+      - STRIPE_ENDPOINT_CANCELED=${STRIPE_ENDPOINT_CANCELED:-}
+      - STRIPE_ENDPOINT_COMPLITE=${STRIPE_ENDPOINT_COMPLITE:-}
+      - TELEGRAM_API=${TELEGRAM_API:-}
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+volumes:
+  server_data:

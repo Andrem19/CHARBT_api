@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Logs</h1>
+
+    <form method="POST">
+        <input type="text" name="action_code" placeholder="Filter by action code">
+        <input type="text" name="user_id" placeholder="Filter by user ID">
+        <input type="text" name="ip_address" placeholder="Filter by IP address">
+        <input type="submit" value="Filter">
+    </form>
+    <form method="POST" action="{{ url_for('adm.delete_old_logs') }}">
+        <input type="number" name="days" placeholder="Number of days">
+        <input type="submit" value="Delete Old Logs">
+    </form>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Action Code</th>
+            <th>Description</th>
+            <th>Timestamp</th>
+            <th>IP Address</th>
+            <th>Additional Info</th>
+        </tr>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.id }}</td>
+                <td>{{ log.user_id }}</td>
+                <td>{{ log.action_code }}</td>
+                <td>{{ log.description }}</td>
+                <td>{{ log.timestamp|datetime }}</td>
+                <td>{{ log.ip_address }}</td>
+                <td>{{ log.add_info }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

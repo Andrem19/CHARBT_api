@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <!-- <a href="{{ url_for('adm.user_search') }}">Search User</a> -->
+    <h1>Search User</h1>
+    <form method="POST" action="{{ url_for('adm.user_search') }}">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+        <label for="refcode">Refcode:</label>
+        <input type="text" id="refcode" name="refcode">
+        <input type="submit" value="Search">
+    </form>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+    <br>
+    <!-- <a href="{{ url_for('adm.user_edit', user_id=1) }}">Edit User</a> Замените 1 на ID пользователя, которого вы хотите редактировать -->
+{% endblock %}

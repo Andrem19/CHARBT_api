@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Welcome to the plans page!</h1>
+    {% for plan in payment_plans %}
+    </br>
+    <hr>
+    <hr>
+        <form method="POST" action="{{ url_for('adm.payment_plans') }}">
+            <input type="hidden" name="plan_id" value="{{ plan.id }}">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ plan.name }}">
+            <label for="token_price_day">Token Price Day:</label>
+            <input type="number" id="token_price_day" name="token_price_day" value="{{ plan.token_price_day }}">
+        </br>
+            <label for="price_subscription_month_1">Price Subscription Month 1:</label>
+            <input type="number" step="0.01" id="price_subscription_month_1" name="price_subscription_month_1" value="{{ plan.price_subscription_month_1 }}">
+            <label for="price_subscription_year_1">Price Subscription Year 1:</label>
+            <input type="number" step="0.01" id="price_subscription_year_1" name="price_subscription_year_1" value="{{ plan.price_subscription_year_1 }}">
+            <label for="price_subscription_month_2">Price Subscription Month 2:</label>
+            <input type="number" step="0.01" id="price_subscription_month_2" name="price_subscription_month_2" value="{{ plan.price_subscription_month_2 }}">
+            <label for="price_subscription_year_2">Price Subscription Year 2:</label>
+            <input type="number" step="0.01" id="price_subscription_year_2" name="price_subscription_year_2" value="{{ plan.price_subscription_year_2 }}">
+        </br>
+            <label for="price_id_month">Price ID Month:</label>
+            <input type="text" id="price_id_month" name="price_id_month" value="{{ plan.price_id_month }}">
+            <label for="price_id_annualy">Price ID Annualy:</label>
+            <input type="text" id="price_id_annualy" name="price_id_annualy" value="{{ plan.price_id_annualy }}">
+        </br>
+        <hr>
+            {% for access in plan.access %}
+                <h2>Plan Access {{ access.id }}</h2>
+                <label for="access_name_{{ access.id }}">Access Name:</label>
+                <input type="text" id="access_name_{{ access.id }}" name="access_name_{{ access.id }}" value="{{ access.name }}">
+                <label for="description_{{ access.id }}">Description:</label>
+                <textarea id="description_{{ access.id }}" name="description_{{ access.id }}">{{ access.description }}</textarea>
+                <label for="number_{{ access.id }}">Number:</label>
+                <input type="number" id="number_{{ access.id }}" name="number_{{ access.id }}" value="{{ access.number }}">
+                <label for="all_{{ access.id }}">All:</label>
+                <input type="number" id="all_{{ access.id }}" name="all_{{ access.id }}" value="{{ access.all }}">
+                <label for="on_{{ access.id }}">On:</label>
+                <input type="checkbox" id="on_{{ access.id }}" name="on_{{ access.id }}" {% if access.on %}checked{% endif %}>
+            {% endfor %}
+    </br>
+            <input type="submit" value="Update">
+        </form>
+    {% endfor %}
+{% endblock %}

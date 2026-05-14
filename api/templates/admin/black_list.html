@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block content %}
+    <h1>Black list</h1>
+    <form method="POST">
+        <input type="text" name="ip" placeholder="IP">
+        <input type="date" name="to">
+        <input type="text" name="reason">
+        <input type="submit" name="add" value="Add to BlackList">
+    </form>
+    <table>
+        {% for entry in black_list %}
+            <tr>
+                <td>{{ entry.id }}</td>
+                <td>{{ entry.ip }}</td>
+                <td>{{ entry.to }}</td>
+                <td>{{ entry.reason }}</td>
+                <td>
+                    <form method="POST">
+                        <input type="hidden" name="id" value="{{ entry.id }}">
+                        <input type="submit" name="delete" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
